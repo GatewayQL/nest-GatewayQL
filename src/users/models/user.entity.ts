@@ -1,11 +1,19 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserRole } from './user.interface';
 
 @ObjectType()
 @Entity('users')
 export class UserEntity extends BaseEntity {
-  constructor(firstname?: string, lastname?: string, redirectUri?: string){
+  constructor(firstname?: string, lastname?: string, redirectUri?: string) {
     super();
     this.firstname = firstname || '';
     this.lastname = lastname || '';
@@ -28,23 +36,23 @@ export class UserEntity extends BaseEntity {
   @Field()
   username?: string;
 
-  @Column('text', {unique: true})
+  @Column('text', { unique: true })
   @Field()
   email: string;
 
   @Column({ nullable: true })
   @Field()
-  redirectUri?: string
+  redirectUri?: string;
 
-  @Column({type: 'enum', enum: UserRole, default: UserRole.USER})
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   @Field()
   role?: UserRole;
 
-  @CreateDateColumn({ type: "timestamp" })
+  @CreateDateColumn({ type: 'timestamp' })
   @Field()
   createdAt?: number;
 
-  @UpdateDateColumn({ type: "timestamp" })
+  @UpdateDateColumn({ type: 'timestamp' })
   @Field()
   updatedAt?: number;
 

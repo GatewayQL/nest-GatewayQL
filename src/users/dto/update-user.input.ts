@@ -19,5 +19,5 @@ export class UpdateUserInput extends PartialType(UserInput) {
   email?: string;
 
   @Field()
-  redirectUri?: string
+  redirectUri?: string;
 }

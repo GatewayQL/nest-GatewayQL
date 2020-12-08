@@ -4,7 +4,7 @@ import { InputType, Field } from '@nestjs/graphql';
 export class UserInput {
   @Field()
   id?: string;
-  
+
   @Field()
   firstname?: string;
 
@@ -18,11 +18,11 @@ export class UserInput {
   email?: string;
 
   @Field()
-  redirectUri?: string
+  redirectUri?: string;
 
   @Field()
-  createdAt?: number
+  createdAt?: number;
 
   @Field()
-  updatedAt?: number
+  updatedAt?: number;
 }

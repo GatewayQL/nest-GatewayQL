@@ -7,10 +7,10 @@ export interface User {
   redirectUri?: string;
   role?: UserRole;
   createdAt?: number;
-  updatedAt?:number;
+  updatedAt?: number;
 }
 
 export enum UserRole {
   ADMIN = 'admin',
-  USER = 'user'
+  USER = 'user',
 }
