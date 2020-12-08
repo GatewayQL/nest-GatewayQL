@@ -18,9 +18,6 @@ export class UserInput {
   email?: string;
 
   @Field()
-  password?: string;
-
-  @Field()
   redirectUri?: string
 
   @Field()

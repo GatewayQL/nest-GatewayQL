@@ -40,7 +40,7 @@ import { CredentialsModule } from './credentials/credentials.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useClass: DatabaseConfig
+      useClass: DatabaseConfig,
     }),
     UsersModule,
     AuthModule,

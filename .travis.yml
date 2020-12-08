@@ -1,0 +1,25 @@
+language: node_js
+
+services:
+    - 'docker'
+
+node_js:
+    - "14"
+
+cache:
+    directories:
+        - "node_modules"
+
+after_success:
+    - docker build -t nest-gatewayql .
+
+before_deploy:
+    - docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD" docker.io ;
+    - docker tag nest-gatewayql $DOCKER_USERNAME/nest-gatewayql:latest
+
+deploy:
+    provider: script
+    script: docker push $DOCKER_USERNAME/nest-gatewayql:latest ;
+
+notifications:
+    email: false

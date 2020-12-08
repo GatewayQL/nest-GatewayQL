@@ -25,7 +25,10 @@ export class CredentialsResolver {
 
   @Mutation(() => CredentialEntity)
   updateCredential(@Args('updateCredentialInput') updateCredentialInput: UpdateCredentialInput) {
-    return this.credentialsService.update(updateCredentialInput.id, updateCredentialInput);
+    return this.credentialsService.update(
+      updateCredentialInput.id,
+      updateCredentialInput,
+    );
   }
 
   @Mutation(() => CredentialEntity)
