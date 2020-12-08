@@ -1,8 +1,17 @@
-import { InputType, Int, Field, PartialType } from '@nestjs/graphql';
-import { CredentialInput } from './credential.input';
+import { InputType, Field } from '@nestjs/graphql';
+import { CredentialType } from '../models/credential.interface';
 
 @InputType()
-export class CreateCredentialInput extends PartialType(CredentialInput) {
+export class CreateCredentialInput {
   @Field()
-  exampleField?: number;
+  scope?: string;
+
+  @Field()
+  consumerId: string;
+
+  @Field()
+  type: CredentialType;
+
+  @Field()
+  secret: string;
 }

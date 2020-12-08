@@ -14,10 +14,8 @@ apiEndpoints:
     paths: /
 
 serviceEndpoints:
-  - name: 'demo'
-    url: 'http://localhost:8044'
-  - name: 'test'
-    url: 'http://localhost:8045'
+  - name: 'countries'
+    url: 'https://countries.trevorblades.com/'
 
 policies:
   - proxy
@@ -33,4 +31,4 @@ pipelines:
             apiEndpoints: api
       - proxy:
           action:
-            serviceEndpoint: demo
+            serviceEndpoint: countries

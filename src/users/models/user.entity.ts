@@ -32,10 +32,6 @@ export class UserEntity extends BaseEntity {
   @Field()
   email: string;
 
-  @Column({ select: false, nullable: false })
-  @Field()
-  password: string;
-
   @Column({ nullable: true })
   @Field()
   redirectUri?: string
