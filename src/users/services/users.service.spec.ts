@@ -4,20 +4,18 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { UsersService } from './users.service';
 import { UserRole } from '../models/user.interface';
-import { AuthModule } from '../../auth/auth.module';
 import { AuthService } from '../../auth/services/auth.service';
 import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let repo: Repository<UserEntity>
+  let repo: Repository<UserEntity>;
 
   const oneUser = new UserEntity();
   oneUser.firstname = 'John';
   oneUser.lastname = 'Doe';
   oneUser.username = 'john.doe';
   oneUser.email = 'john.doe@test.com';
-  oneUser.password = 'secret';
   oneUser.role = UserRole.ADMIN;
 
   beforeEach(async () => {
@@ -25,7 +23,7 @@ describe('UsersService', () => {
       providers: [
         AuthService,
         ConfigService,
-        UsersService, 
+        UsersService,
         {
           provide: getRepositoryToken(UserEntity),
           useValue: {
@@ -34,8 +32,8 @@ describe('UsersService', () => {
             save: jest.fn(),
             update: jest.fn().mockResolvedValue(true),
             delete: jest.fn().mockResolvedValue(true),
-          }
-        }
+          },
+        },
       ],
     }).compile();
 
@@ -47,8 +45,8 @@ describe('UsersService', () => {
       lastname: 'admin',
       username: 'admin.admin',
       email: 'admin.admin@test.com',
-      role: UserRole.ADMIN
-    })
+      role: UserRole.ADMIN,
+    });
   });
 
   it('should be defined', () => {
@@ -63,17 +61,14 @@ describe('UsersService', () => {
           lastname: 'Doe',
           username: 'john.doe',
           email: 'john.doe@test.com',
-        })
+        }),
       );
     });
   });
 
   describe('findAll', () => {
     it('should return users', async () => {
-      expect(
-        await service.findByemail('admin.admin@test.com')
-      )
+      expect(await service.findByemail('admin.admin@test.com'));
     });
   });
-
 });

@@ -1,4 +1,4 @@
-import * as fs  from 'fs';
+import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { join } from 'path';
 
@@ -11,6 +11,6 @@ export default () => {
     );
   } catch (error) {
     console.log('Cannot read system.config.yml');
-    throw(error);
+    throw error;
   }
 };
