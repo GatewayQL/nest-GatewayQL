@@ -1,9 +1,6 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { from, Observable, throwError } from 'rxjs';
-import { switchMap, map, catchError} from 'rxjs/operators';
-import { AuthService } from '../../auth/services/auth.service';
 import { UserEntity } from '../models/user.entity';
 import { User } from '../models/user.interface';
 
@@ -11,92 +8,60 @@ import { User } from '../models/user.interface';
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
-    
-    @Inject(forwardRef(() => AuthService))
-    private authService: AuthService
   ) {}
 
-  create(user: User): Observable<User> {
-    return this.authService.saltAndHash(user.password).pipe(
-      switchMap((passwordHash: string) => {
-        const newUser = new UserEntity();
-        newUser.firstname = user.firstname;
-        newUser.lastname = user.lastname;
-        if (user.username === undefined || user.username === '' || user.username === null) {
-          newUser.username = user.email;
-        } else {
-          newUser.username = user.username;
-        }
-        newUser.email = user.email;
-        newUser.password = passwordHash;
-        newUser.redirectUri = user.redirectUri;
-        newUser.role = user.role;
+  async create(user: User): Promise<User> {
+    const newUser = new UserEntity();
+    newUser.firstname = user.firstname;
+    newUser.lastname = user.lastname;
+    if (
+      user.username === undefined ||
+      user.username === '' ||
+      user.username === null
+    ) {
+      newUser.username = user.email;
+    } else {
+      newUser.username = user.username;
+    }
+    newUser.email = user.email;
+    newUser.redirectUri = user.redirectUri;
+    newUser.role = user.role;
 
-        const createdUser = this.userRepository.create(newUser);
+    const createdUser = await this.userRepository.create(newUser);
 
-        return from(this.userRepository.save(createdUser)).pipe(
-          map((user: User) => {
-            const {password, ...result} = user;
-            return result;
-          }),
-            catchError(err => throwError(err))
-        )
-      })
-    )
+    try {
+      return await this.userRepository.save(createdUser);
+    } catch (e) {
+      throw new BadRequestException(
+        'Cannot create user into database. error: ' + e,
+      );
+    }
   }
 
-  findOne(id: string): Observable<User> {
-    return from(this.userRepository.findOne({id})).pipe(
-      map((user: User) => {
-          const {password, ...result} = user;
-          return result;
-      } )
-    )
+  async findOne(id: string): Promise<User> {
+    return await this.userRepository.findOne({ id });
   }
 
-  findAll(): Observable<User[]> {
-    return from(this.userRepository.find()).pipe(
-      map((users: User[]) => {
-        users.forEach(function (v) {delete v.password});
-        return users;
-      })
-    );
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find();
   }
 
-  deleteOne(id: string): Observable<any> {
-    return from(this.userRepository.delete(id));
+  async deleteOne(id: string): Promise<any> {
+    return await this.userRepository.delete(id);
   }
 
-  updateOne(id: string, user: User): Observable<any> {
+  async updateOne(id: string, user: User): Promise<any> {
     delete user.email;
-    delete user.password;
     delete user.role;
-    
-    return from(this.userRepository.update(id, user)).pipe(
-        switchMap(() => this.findOne(id))
-    );
-  } 
 
-  findByemail(email: string): Observable<User> {
-    return from(this.userRepository.findOne({email}));
+    return await this.userRepository.update(id, user);
   }
 
-  findByUsername(username: string): Observable<User> {
-    return from(this.userRepository.findOne({username}));
+  async findByemail(email: string): Promise<User> {
+    return await this.userRepository.findOne({ email });
   }
 
-  validateUser(email: string, password: string): Observable<User> {
-    return from(this.findByemail(email)).pipe(
-      switchMap((user: User) => this.authService.compareSaltAndHashed(password, user.password).pipe(
-        map((match: boolean) => {
-          if(match) {
-            const {password, ...result} = user;
-            return result;
-          } else {
-            throw Error;
-          }
-        })
-      ))
-    )
+  async findByUsername(username: string): Promise<User> {
+    return await this.userRepository.findOne({ username });
   }
 }

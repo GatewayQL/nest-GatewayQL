@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config';
 import { GatewayModuleOptions, GatewayOptionsFactory } from '@nestjs/graphql';
 import { ServiceDefinition } from '@apollo/federation';
 
 @Injectable()
 export class GraphQLConfigService implements GatewayOptionsFactory {
-  constructor(
-    private configService: ConfigService
-  ){}
+  constructor(private configService: ConfigService) {}
 
   public createGatewayOptions(): Partial<GatewayModuleOptions> {
     return {
@@ -17,12 +15,12 @@ export class GraphQLConfigService implements GatewayOptionsFactory {
     };
   }
 
-  serviceList() : Pick<ServiceDefinition, 'name' | 'url'>[] {
+  serviceList(): Pick<ServiceDefinition, 'name' | 'url'>[] {
     const serviceEndpoints = this.configService.get<string>('serviceEndpoints');
     if (Array.isArray(serviceEndpoints)) {
       return serviceEndpoints;
     } else {
-      return [{name: 'default', url: 'http://localhost:3001/graphql'}];
+      return [{ name: 'default', url: 'http://localhost:3001/graphql' }];
     }
-  } 
+  }
 }
