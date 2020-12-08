@@ -17,7 +17,14 @@ describe('UsersPipe', () => {
 
   describe('successful calls', () => {
     it('should let the cat DTO go on through', () => {
-      const user = { firstname: 'Test Name', lastname: 'Test lastname', username: 'test.username', email: 'Test.email@test.com', redirectUri: 'http://localhost/redirect', role: UserRole.USER };
+      const user = {
+        firstname: 'Test Name',
+        lastname: 'Test lastname',
+        username: 'test.username',
+        email: 'Test.email@test.com',
+        redirectUri: 'http://localhost/redirect',
+        role: UserRole.USER,
+      };
       //expect(pipe.transform(user)).toEqual(CreateUserInput);
     });
   });

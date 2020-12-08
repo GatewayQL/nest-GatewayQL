@@ -5,7 +5,7 @@ import { CredentialInput } from './credential.input';
 export class UpdateCredentialInput extends PartialType(CredentialInput) {
   @Field()
   id?: string;
-  
+
   @Field()
   exampleField?: number;
 }
