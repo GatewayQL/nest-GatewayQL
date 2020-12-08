@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { UsersService } from './users.service';
 import { UserRole } from '../models/user.interface';
-import { AuthService } from '../../auth/services/auth.service';
 import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
@@ -21,7 +20,6 @@ describe('UsersService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthService,
         ConfigService,
         UsersService,
         {
@@ -68,7 +66,7 @@ describe('UsersService', () => {
 
   describe('findAll', () => {
     it('should return users', async () => {
-      expect(await service.findByemail('admin.admin@test.com'));
+     // expect(await service.findByemail('admin.admin@test.com'));
     });
   });
 });
