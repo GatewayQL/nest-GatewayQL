@@ -3,29 +3,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { User } from '../models/user.interface';
+import { CreateUserInput } from '../dto/create-user.input';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async create(user: User): Promise<User> {
+  async create(createUserInput: CreateUserInput): Promise<User> {
     const newUser = new UserEntity();
-    newUser.firstname = user.firstname;
-    newUser.lastname = user.lastname;
+    newUser.firstname = createUserInput.firstname;
+    newUser.lastname = createUserInput.lastname;
     if (
-      user.username === undefined ||
-      user.username === '' ||
-      user.username === null
+      createUserInput.username === undefined ||
+      createUserInput.username === '' ||
+      createUserInput.username === null
     ) {
-      newUser.username = user.email;
+      newUser.username = createUserInput.email;
     } else {
-      newUser.username = user.username;
+      newUser.username = createUserInput.username;
     }
-    newUser.email = user.email;
-    newUser.redirectUri = user.redirectUri;
-    newUser.role = user.role;
+    newUser.email = createUserInput.email;
+    newUser.redirectUri = createUserInput.redirectUri;
 
     const createdUser = await this.userRepository.create(newUser);
 
