@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { GraphQLGatewayModule } from '@nestjs/graphql';
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLGatewayModule, GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
@@ -11,9 +10,9 @@ import { GraphQLConfigService } from './config/graphql-config.service';
 import gatewayConfiguration from './config/gateway.configuration';
 import systemConfiguration from './config/system.configuration';
 import { DatabaseConfig } from './config/databases/database.config';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CredentialsModule } from './credentials/credentials.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
