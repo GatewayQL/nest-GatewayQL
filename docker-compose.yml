@@ -16,8 +16,8 @@ services:
       - /usr/src/app/dist
       - /usr/src/app/node_modules
     ports:
-      - 3000:3000
-      - 9229:9229 # FOR DEBUG
+      - "${PORT:-3000}:${PORT:-3000}"
+      - "${DEBUG_PORT:-9229}:${DEBUG_PORT:-9229}" # FOR DEBUG
     command: npm run start:debug
     env_file: .env
     networks:
@@ -34,10 +34,10 @@ services:
   postgres:
     container_name: gatewayql_postgres
     env_file: .env
-    environment: 
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=gatewayql
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-gatewayql}
       - PGDATA=/data/postgres
     image: postgres
     volumes:
@@ -45,7 +45,7 @@ services:
     networks:
       - gatewayql
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
     restart: unless-stopped
 
   pgadmin:

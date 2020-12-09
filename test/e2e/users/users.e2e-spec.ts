@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
@@ -22,7 +22,6 @@ describe('Users GraphQL(e2e)', () => {
           firstname: "John",
           email: "john.doe@test.com",
           username: "john.doe@test.com",
-          password: "password",
         }
       ) {
         id,
@@ -30,10 +29,12 @@ describe('Users GraphQL(e2e)', () => {
         lastname,
         email,
         username,
+        role.
+        createdAt,
+        updatedAt,
       }
-    }`
+    }`;
     const response = mutation(mutationData);
-    
   });
 
   afterEach(async () => {
@@ -42,36 +43,35 @@ describe('Users GraphQL(e2e)', () => {
       {
         users { id }
       }`;
-    const response = query(queryData);  
-    
+    const response = query(queryData);
     await app.close();
   });
 
-  async function query(query: {}) {
+  async function query(query: any) {
     const response = await request(app.getHttpServer())
-    .post('/admin')
-    .send({
-      operationName: null,
-      variables: {},
-      query: `
+      .post('/admin')
+      .send({
+        operationName: null,
+        variables: {},
+        query: `
         ${query}
       `,
-    })
-    .expect(200);
+      })
+      .expect(200);
     return response.body.data;
-  } 
+  }
 
-  async function mutation(mutation: {}) {
+  async function mutation(mutation: any) {
     const response = await request(app.getHttpServer())
-    .post('/admin')
-    .send({
-      operationName: null,
-      variables: {},
-      mutation: `
+      .post('/admin')
+      .send({
+        operationName: null,
+        variables: {},
+        mutation: `
         ${mutation}
       `,
-    })
-    .expect(200);
+      })
+      .expect(200);
     return response.body.data;
   }
 });
