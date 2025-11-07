@@ -24,8 +24,8 @@ export const Login: React.FC = () => {
     try {
       await login(username, password);
       navigate('/dashboard');
-    } catch (err) {
-      setError('Invalid username or password');
+    } catch (err: any) {
+      setError(err?.message || 'Invalid username or password');
     }
   };
 
