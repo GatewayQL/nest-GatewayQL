@@ -111,7 +111,9 @@ describe('AuthService', () => {
       const password = 'testPassword123';
       const hash = await service.saltAndHash(password).toPromise();
 
-      const result = await service.compareSaltAndHashed(password, hash).toPromise();
+      const result = await service
+        .compareSaltAndHashed(password, hash)
+        .toPromise();
 
       expect(result).toBe(true);
     });

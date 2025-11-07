@@ -69,7 +69,9 @@ export class InitialSchema1699999999999 implements MigrationInterface {
     // Drop indexes
     await queryRunner.query(`DROP INDEX IF EXISTS "IDX_credentials_type"`);
     await queryRunner.query(`DROP INDEX IF EXISTS "IDX_credentials_key_id"`);
-    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_credentials_consumer_id"`);
+    await queryRunner.query(
+      `DROP INDEX IF EXISTS "IDX_credentials_consumer_id"`,
+    );
     await queryRunner.query(`DROP INDEX IF EXISTS "IDX_users_email"`);
     await queryRunner.query(`DROP INDEX IF EXISTS "IDX_users_username"`);
 

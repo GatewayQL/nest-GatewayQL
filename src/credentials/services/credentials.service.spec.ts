@@ -26,8 +26,8 @@ describe('CredentialsService', () => {
         {
           provide: CredentialsService,
           useValue: {
-            create: jest.fn().mockReturnValue(oneCredential)
-          }
+            create: jest.fn().mockReturnValue(oneCredential),
+          },
         },
         {
           provide: getRepositoryToken(CredentialEntity),
@@ -37,13 +37,15 @@ describe('CredentialsService', () => {
             save: jest.fn(),
             update: jest.fn().mockResolvedValue(true),
             delete: jest.fn().mockResolvedValue(true),
-          }
+          },
         },
       ],
     }).compile();
 
     service = module.get<CredentialsService>(CredentialsService);
-    repo = module.get<Repository<CredentialEntity>>(getRepositoryToken(CredentialEntity));
+    repo = module.get<Repository<CredentialEntity>>(
+      getRepositoryToken(CredentialEntity),
+    );
   });
 
   it('should be defined', () => {

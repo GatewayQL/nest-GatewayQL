@@ -10,7 +10,8 @@ export class CacheConfigService implements CacheOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   async createCacheOptions(): Promise<CacheModuleOptions> {
-    const useRedis = this.configService.get('REDIS_ENABLED', 'false') === 'true';
+    const useRedis =
+      this.configService.get('REDIS_ENABLED', 'false') === 'true';
 
     if (useRedis) {
       try {
@@ -23,7 +24,9 @@ export class CacheConfigService implements CacheOptionsFactory {
             reconnectStrategy: (retries) => {
               // Exponential backoff: 2^retries * 100ms, max 3 seconds
               const delay = Math.min(Math.pow(2, retries) * 100, 3000);
-              this.logger.warn(`Redis connection lost. Reconnecting in ${delay}ms (attempt ${retries + 1})`);
+              this.logger.warn(
+                `Redis connection lost. Reconnecting in ${delay}ms (attempt ${retries + 1})`,
+              );
               return delay;
             },
             connectTimeout: 10000, // 10 seconds
@@ -43,7 +46,10 @@ export class CacheConfigService implements CacheOptionsFactory {
         const client = store.client;
 
         client.on('error', (error) => {
-          this.logger.error(`Redis client error: ${error.message}`, error.stack);
+          this.logger.error(
+            `Redis client error: ${error.message}`,
+            error.stack,
+          );
         });
 
         client.on('connect', () => {
@@ -69,7 +75,10 @@ export class CacheConfigService implements CacheOptionsFactory {
           ttl: parseInt(this.configService.get('CACHE_TTL', '60000'), 10),
         };
       } catch (error) {
-        this.logger.error(`Failed to connect to Redis: ${error.message}`, error.stack);
+        this.logger.error(
+          `Failed to connect to Redis: ${error.message}`,
+          error.stack,
+        );
         this.logger.warn('Falling back to in-memory cache');
 
         // Fallback to in-memory cache on Redis connection failure
