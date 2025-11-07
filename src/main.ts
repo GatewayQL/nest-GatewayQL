@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { CustomLoggerService } from './common/logger/logger.service';
+import { initTracing } from './tracing/tracing';
+
+// Initialize OpenTelemetry tracing
+if (process.env.ENABLE_TRACING === 'true') {
+  initTracing();
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -34,6 +40,7 @@ async function bootstrap() {
       process.env.CORS_ORIGIN?.split(',') || [
         'http://localhost:3000',
         'http://localhost:3001',
+        'http://localhost:5173', // Admin dashboard
       ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -57,8 +64,12 @@ async function bootstrap() {
     }),
   );
 
-  // Global prefix (optional)
-  // app.setGlobalPrefix('api');
+  // API Versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+    prefix: 'api/v',
+  });
 
   // Graceful shutdown
   app.enableShutdownHooks();
@@ -72,7 +83,10 @@ async function bootstrap() {
   logger.log(`🔍 GraphQL Gateway: http://localhost:${port}/graphql`);
   logger.log(`⚙️  Admin GraphQL: http://localhost:${port}/admin`);
   logger.log(`❤️  Health Check: http://localhost:${port}/health`);
-  logger.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+  logger.log(`📊 Metrics: http://localhost:${port}/metrics`);
+  logger.log(`🌐 WebSocket: ws://localhost:${port}`);
+  logger.log(`📈 API Version: ${process.env.API_VERSION || 'v1'}`);
+  logger.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
 }
 
 bootstrap().catch((error) => {

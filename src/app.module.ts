@@ -6,8 +6,9 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CacheModule } from '@nestjs/cache-manager';
-import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR, APP_VERSION } from '@nestjs/core';
 import { join } from 'path';
+import { makeCounterProvider, makeHistogramProvider } from '@willsoto/nestjs-prometheus';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,11 +17,15 @@ import { GraphQLConfigService } from './config/graphql-config.service';
 import gatewayConfiguration from './config/gateway.configuration';
 import systemConfiguration from './config/system.configuration';
 import { DatabaseConfig } from './config/databases/database.config';
+import { CacheConfigService } from './config/cache.config';
 import { AuthModule } from './auth/auth.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { UsersModule } from './users/users.module';
 import { HealthModule } from './health/health.module';
 import { LoggerModule } from './common/logger/logger.module';
+import { MetricsModule } from './metrics/metrics.module';
+import { MetricsController } from './metrics/metrics.controller';
+import { EventsModule } from './events/events.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ThrottlerGuard } from '@nestjs/throttler';
@@ -49,12 +54,18 @@ import { ThrottlerGuard } from '@nestjs/throttler';
       ],
     }),
 
-    // Caching
-    CacheModule.register({
+    // Caching (Redis or in-memory)
+    CacheModule.registerAsync({
       isGlobal: true,
-      ttl: 60000, // 60 seconds
-      max: 100, // maximum number of items in cache
+      imports: [ConfigModule],
+      useClass: CacheConfigService,
     }),
+
+    // Metrics
+    MetricsModule,
+
+    // WebSocket Events
+    EventsModule,
 
     // GraphQL Gateway
     GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
@@ -92,9 +103,26 @@ import { ThrottlerGuard } from '@nestjs/throttler';
     CredentialsModule,
     HealthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, MetricsController],
   providers: [
     AppService,
+    // API Version
+    {
+      provide: APP_VERSION,
+      useValue: process.env.API_VERSION || 'v1',
+    },
+    // Prometheus metrics
+    makeCounterProvider({
+      name: 'http_requests_total',
+      help: 'Total number of HTTP requests',
+      labelNames: ['method', 'route', 'status_code'],
+    }),
+    makeHistogramProvider({
+      name: 'http_request_duration_seconds',
+      help: 'HTTP request duration in seconds',
+      labelNames: ['method', 'route', 'status_code'],
+      buckets: [0.1, 0.5, 1, 2, 5],
+    }),
     // Global exception filter
     {
       provide: APP_FILTER,
