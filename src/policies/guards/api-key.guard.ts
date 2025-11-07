@@ -57,21 +57,29 @@ export class ApiKeyGuard implements CanActivate {
         if (envApiKey && apiKeyHeader === envApiKey) {
           return true;
         }
-        throw new UnauthorizedException('Invalid API key format. Expected format: keyId:keySecret');
+        throw new UnauthorizedException(
+          'Invalid API key format. Expected format: keyId:keySecret',
+        );
       }
 
       // Find all credentials
-      const credentials = await firstValueFrom(this.credentialsService.findAll());
+      const credentials = await firstValueFrom(
+        this.credentialsService.findAll(),
+      );
 
       // Find credential with matching keyId
-      const credential = credentials.find(c => c.keyId === keyId && c.type === 'key-auth' && c.isActive);
+      const credential = credentials.find(
+        (c) => c.keyId === keyId && c.type === 'key-auth' && c.isActive,
+      );
 
       if (!credential) {
         throw new UnauthorizedException('Invalid API key');
       }
 
       // Get the full credential with secret
-      const fullCredential = await this.credentialsService.findByCosumerId(credential.consumerId);
+      const fullCredential = await this.credentialsService.findByCosumerId(
+        credential.consumerId,
+      );
 
       if (!fullCredential || !fullCredential.keySecret) {
         throw new UnauthorizedException('Invalid API key');
@@ -79,7 +87,10 @@ export class ApiKeyGuard implements CanActivate {
 
       // Verify the key secret matches
       const isValid = await firstValueFrom(
-        this.authService.compareSaltAndHashed(keySecret, fullCredential.keySecret),
+        this.authService.compareSaltAndHashed(
+          keySecret,
+          fullCredential.keySecret,
+        ),
       );
 
       if (!isValid) {

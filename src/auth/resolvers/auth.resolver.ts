@@ -18,9 +18,13 @@ export class AuthResolver {
   ) {}
 
   @Mutation(() => AuthResponse)
-  async login(@Args('loginInput') loginInput: LoginInput): Promise<AuthResponse> {
+  async login(
+    @Args('loginInput') loginInput: LoginInput,
+  ): Promise<AuthResponse> {
     // Find user with password hash
-    const user = await this.usersService.findByUsernameWithPassword(loginInput.username);
+    const user = await this.usersService.findByUsernameWithPassword(
+      loginInput.username,
+    );
 
     if (!user || !user.passwordHash) {
       throw new UnauthorizedException('Invalid credentials');
@@ -28,7 +32,10 @@ export class AuthResolver {
 
     // Verify password
     const isPasswordValid = await firstValueFrom(
-      this.authService.compareSaltAndHashed(loginInput.password, user.passwordHash),
+      this.authService.compareSaltAndHashed(
+        loginInput.password,
+        user.passwordHash,
+      ),
     );
 
     if (!isPasswordValid) {
