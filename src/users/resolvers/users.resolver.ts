@@ -16,7 +16,9 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => UserEntity)
-  async createUser(@Args('createUserInput', new UsersPipe()) createUserInput: CreateUserInput) {
+  async createUser(
+    @Args('createUserInput', new UsersPipe()) createUserInput: CreateUserInput,
+  ) {
     return await this.usersService.create(createUserInput);
   }
 
@@ -31,7 +33,9 @@ export class UsersResolver {
   }
 
   @Query(() => UserEntity, { name: 'userByUsername' })
-  async getUserByUsername(@Args('username', { type: () => String }) username: string) {
+  async getUserByUsername(
+    @Args('username', { type: () => String }) username: string,
+  ) {
     return await this.usersService.findByUsername(username);
   }
 
@@ -43,7 +47,9 @@ export class UsersResolver {
   @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
   @Mutation(() => UserEntity)
-  async updateUser(@Args('updateUserInput', new UsersPipe()) updateUserInput: UpdateUserInput) {
+  async updateUser(
+    @Args('updateUserInput', new UsersPipe()) updateUserInput: UpdateUserInput,
+  ) {
     return await this.usersService.updateOne(
       updateUserInput.id,
       updateUserInput,

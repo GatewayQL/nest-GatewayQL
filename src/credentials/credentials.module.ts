@@ -14,5 +14,6 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
   ],
   providers: [CredentialsResolver, CredentialsService],
+  exports: [CredentialsService],
 })
 export class CredentialsModule {}
