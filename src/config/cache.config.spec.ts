@@ -35,13 +35,15 @@ describe('CacheConfigService', () => {
 
   describe('createCacheOptions', () => {
     it('should return in-memory cache config when Redis is disabled', async () => {
-      mockConfigService.get.mockImplementation((key: string, defaultValue?: any) => {
-        const values = {
-          REDIS_ENABLED: 'false',
-          CACHE_TTL: 60000,
-        };
-        return values[key] !== undefined ? values[key] : defaultValue;
-      });
+      mockConfigService.get.mockImplementation(
+        (key: string, defaultValue?: any) => {
+          const values = {
+            REDIS_ENABLED: 'false',
+            CACHE_TTL: 60000,
+          };
+          return values[key] !== undefined ? values[key] : defaultValue;
+        },
+      );
 
       const result = await service.createCacheOptions();
 
@@ -52,9 +54,11 @@ describe('CacheConfigService', () => {
     });
 
     it('should use default TTL when not configured', async () => {
-      mockConfigService.get.mockImplementation((key: string, defaultValue?: any) => {
-        return defaultValue;
-      });
+      mockConfigService.get.mockImplementation(
+        (key: string, defaultValue?: any) => {
+          return defaultValue;
+        },
+      );
 
       const result = await service.createCacheOptions();
 
