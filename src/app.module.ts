@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
+import { ApolloDriver, ApolloDriverConfig, ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -81,14 +81,19 @@ import { ThrottlerGuard } from '@nestjs/throttler';
       inject: [GraphQLConfigService],
     }),
 
-    // Admin GraphQL API
-    GraphQLModule.forRoot({
-      driver: ApolloGatewayDriver,
+    // Admin GraphQL API with Subscriptions
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'generated/admin.gql'),
       path: 'admin',
       playground: process.env.NODE_ENV !== 'production',
       introspection: process.env.NODE_ENV !== 'production',
       context: ({ req }) => ({ headers: req.headers }),
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': false, // Disable legacy protocol
+      },
+      installSubscriptionHandlers: true,
     }),
 
     // Database
