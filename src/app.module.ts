@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { GraphQLGatewayModule, GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
@@ -21,21 +22,16 @@ import { UsersModule } from './users/users.module';
       ignoreEnvFile: true,
       load: [gatewayConfiguration, systemConfiguration],
     }),
-    GraphQLGatewayModule.forRootAsync({
+    GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
+      driver: ApolloGatewayDriver,
       useFactory: async (graphQLConfigService: GraphQLConfigService) => ({
         ...graphQLConfigService.createGatewayOptions(),
-        autoSchemaFile: join(process.cwd(), 'generated/gateway.gql'),
-        context: ({ req }) => ({ headers: req.headers }),
+        server: {
+          context: ({ req }) => ({ headers: req.headers }),
+        },
       }),
       imports: [SystemConfigModule],
       inject: [GraphQLConfigService],
-    }),
-    GraphQLModule.forRoot({
-      debug: false,
-      playground: true,
-      autoSchemaFile: join(process.cwd(), 'generated/admin.gql'),
-      path: 'admin',
-      context: ({ req }) => ({ headers: req.headers }),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
