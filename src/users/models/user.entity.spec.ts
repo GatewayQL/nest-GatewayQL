@@ -29,5 +29,4 @@ describe('UserEntiry class', () => {
     expect(user.lastname).toBe('Unit');
     expect(user.redirectUri).toBe('http://localhost');
   });
-
 });

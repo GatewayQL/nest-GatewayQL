@@ -28,14 +28,18 @@ describe('CustomLoggerService', () => {
     it('should log a message', () => {
       const spy = jest.spyOn(service['logger'], 'info');
       service.log('Test message', 'TestContext');
-      expect(spy).toHaveBeenCalledWith('Test message', { context: 'TestContext' });
+      expect(spy).toHaveBeenCalledWith('Test message', {
+        context: 'TestContext',
+      });
     });
 
     it('should use the set context if no context provided', () => {
       service.setContext('DefaultContext');
       const spy = jest.spyOn(service['logger'], 'info');
       service.log('Test message');
-      expect(spy).toHaveBeenCalledWith('Test message', { context: 'DefaultContext' });
+      expect(spy).toHaveBeenCalledWith('Test message', {
+        context: 'DefaultContext',
+      });
     });
   });
 
@@ -54,7 +58,9 @@ describe('CustomLoggerService', () => {
     it('should log a warning', () => {
       const spy = jest.spyOn(service['logger'], 'warn');
       service.warn('Warning message', 'WarnContext');
-      expect(spy).toHaveBeenCalledWith('Warning message', { context: 'WarnContext' });
+      expect(spy).toHaveBeenCalledWith('Warning message', {
+        context: 'WarnContext',
+      });
     });
   });
 
@@ -62,7 +68,9 @@ describe('CustomLoggerService', () => {
     it('should log a debug message', () => {
       const spy = jest.spyOn(service['logger'], 'debug');
       service.debug('Debug message', 'DebugContext');
-      expect(spy).toHaveBeenCalledWith('Debug message', { context: 'DebugContext' });
+      expect(spy).toHaveBeenCalledWith('Debug message', {
+        context: 'DebugContext',
+      });
     });
   });
 
@@ -70,7 +78,9 @@ describe('CustomLoggerService', () => {
     it('should log a verbose message', () => {
       const spy = jest.spyOn(service['logger'], 'verbose');
       service.verbose('Verbose message', 'VerboseContext');
-      expect(spy).toHaveBeenCalledWith('Verbose message', { context: 'VerboseContext' });
+      expect(spy).toHaveBeenCalledWith('Verbose message', {
+        context: 'VerboseContext',
+      });
     });
   });
 
@@ -84,11 +94,14 @@ describe('CustomLoggerService', () => {
         get: jest.fn(() => 'Mozilla'),
       };
       service.logRequest(mockReq as any);
-      expect(spy).toHaveBeenCalledWith('Incoming request', expect.objectContaining({
-        context: 'HTTP',
-        method: 'GET',
-        url: '/test',
-      }));
+      expect(spy).toHaveBeenCalledWith(
+        'Incoming request',
+        expect.objectContaining({
+          context: 'HTTP',
+          method: 'GET',
+          url: '/test',
+        }),
+      );
     });
   });
 
@@ -98,11 +111,14 @@ describe('CustomLoggerService', () => {
       const mockReq = { method: 'GET', url: '/test' };
       const mockRes = { statusCode: 200 };
       service.logResponse(mockReq as any, mockRes as any, 150);
-      expect(spy).toHaveBeenCalledWith('Outgoing response', expect.objectContaining({
-        context: 'HTTP',
-        statusCode: 200,
-        duration: '150ms',
-      }));
+      expect(spy).toHaveBeenCalledWith(
+        'Outgoing response',
+        expect.objectContaining({
+          context: 'HTTP',
+          statusCode: 200,
+          duration: '150ms',
+        }),
+      );
     });
   });
 });

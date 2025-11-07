@@ -21,21 +21,23 @@ export class CustomLoggerService implements LoggerService {
         new winston.transports.Console({
           format: winston.format.combine(
             winston.format.colorize(),
-            winston.format.printf(({ timestamp, level, message, context, trace, ...meta }) => {
-              let log = `${timestamp} [${context || 'Application'}] ${level}: ${message}`;
+            winston.format.printf(
+              ({ timestamp, level, message, context, trace, ...meta }) => {
+                let log = `${timestamp} [${context || 'Application'}] ${level}: ${message}`;
 
-              // Add additional metadata if present
-              if (Object.keys(meta).length > 0) {
-                log += `\n${JSON.stringify(meta, null, 2)}`;
-              }
+                // Add additional metadata if present
+                if (Object.keys(meta).length > 0) {
+                  log += `\n${JSON.stringify(meta, null, 2)}`;
+                }
 
-              // Add stack trace if present
-              if (trace) {
-                log += `\n${trace}`;
-              }
+                // Add stack trace if present
+                if (trace) {
+                  log += `\n${trace}`;
+                }
 
-              return log;
-            }),
+                return log;
+              },
+            ),
           ),
         }),
       ],
