@@ -17,4 +17,7 @@ export class CreateUserInput extends PartialType(UserInput) {
 
   @Field()
   redirectUri?: string;
+
+  @Field({ nullable: true })
+  password?: string;
 }

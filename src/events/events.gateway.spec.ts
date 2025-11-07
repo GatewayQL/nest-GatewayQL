@@ -42,14 +42,18 @@ describe('EventsGateway', () => {
   describe('handleConnection', () => {
     it('should log when client connects', () => {
       gateway.handleConnection(mockSocket);
-      expect(mockLogger.log).toHaveBeenCalledWith(`Client connected: ${mockSocket.id}`);
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        `Client connected: ${mockSocket.id}`,
+      );
     });
   });
 
   describe('handleDisconnect', () => {
     it('should log when client disconnects', () => {
       gateway.handleDisconnect(mockSocket);
-      expect(mockLogger.log).toHaveBeenCalledWith(`Client disconnected: ${mockSocket.id}`);
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        `Client disconnected: ${mockSocket.id}`,
+      );
     });
   });
 
@@ -59,7 +63,9 @@ describe('EventsGateway', () => {
       expect(result.event).toBe('health');
       expect(result.data.status).toBe('ok');
       expect(result.data.timestamp).toBeDefined();
-      expect(mockLogger.log).toHaveBeenCalledWith(`Health check from client: ${mockSocket.id}`);
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        `Health check from client: ${mockSocket.id}`,
+      );
     });
   });
 
@@ -71,7 +77,9 @@ describe('EventsGateway', () => {
       gateway.server = mockServer as any;
 
       gateway.emitToAll('test-event', { data: 'test' });
-      expect(mockServer.emit).toHaveBeenCalledWith('test-event', { data: 'test' });
+      expect(mockServer.emit).toHaveBeenCalledWith('test-event', {
+        data: 'test',
+      });
     });
   });
 

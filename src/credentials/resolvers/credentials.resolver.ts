@@ -9,7 +9,9 @@ export class CredentialsResolver {
   constructor(private readonly credentialsService: CredentialsService) {}
 
   @Mutation(() => CredentialEntity)
-  createCredential(@Args('createCredentialInput') createCredentialInput: CreateCredentialInput) {
+  createCredential(
+    @Args('createCredentialInput') createCredentialInput: CreateCredentialInput,
+  ) {
     return this.credentialsService.create(createCredentialInput);
   }
 
@@ -24,7 +26,9 @@ export class CredentialsResolver {
   }
 
   @Mutation(() => CredentialEntity)
-  updateCredential(@Args('updateCredentialInput') updateCredentialInput: UpdateCredentialInput) {
+  updateCredential(
+    @Args('updateCredentialInput') updateCredentialInput: UpdateCredentialInput,
+  ) {
     return this.credentialsService.update(
       updateCredentialInput.id,
       updateCredentialInput,
