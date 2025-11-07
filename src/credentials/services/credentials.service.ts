@@ -100,12 +100,86 @@ export class CredentialsService {
     return this.credentialRepository.findOne({ consumerId });
   }
 
-  update(id: string, updateCredentialInput: UpdateCredentialInput) {
-    return `This action updates a #${id} credential`;
+  update(id: string, updateCredentialInput: UpdateCredentialInput): Observable<Credential> {
+    return from(this.credentialRepository.findOne({ where: { id } })).pipe(
+      switchMap((credential: Credential) => {
+        if (!credential) {
+          return throwError(() => new Error(`Credential with id ${id} not found`));
+        }
+
+        // Update allowed fields
+        if (updateCredentialInput.scope !== undefined) {
+          credential.scope = updateCredentialInput.scope;
+        }
+
+        if (updateCredentialInput.isActive !== undefined) {
+          credential.isActive = updateCredentialInput.isActive;
+        }
+
+        // If updating secret, hash it
+        if (updateCredentialInput.secret) {
+          return this.authService.saltAndHash(updateCredentialInput.secret).pipe(
+            switchMap((secretHash: string) => {
+              if (credential.type === 'key-auth') {
+                credential.keySecret = secretHash;
+              } else if (credential.type === 'basic-auth') {
+                credential.password = updateCredentialInput.secret;
+                credential.passwordHash = secretHash;
+              } else if (credential.type === 'oauth2') {
+                credential.secret = secretHash;
+              }
+
+              credential.updatedBy = updateCredentialInput.updatedBy || 'system';
+
+              return from(this.credentialRepository.save(credential)).pipe(
+                map((updated: Credential) => {
+                  delete updated.secret;
+                  delete updated.keySecret;
+                  delete updated.password;
+                  return updated;
+                }),
+              );
+            }),
+          );
+        }
+
+        credential.updatedBy = updateCredentialInput.updatedBy || 'system';
+
+        return from(this.credentialRepository.save(credential)).pipe(
+          map((updated: Credential) => {
+            delete updated.secret;
+            delete updated.keySecret;
+            delete updated.password;
+            return updated;
+          }),
+        );
+      }),
+      catchError((err) => throwError(() => err)),
+    );
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} credential`;
+  remove(id: string): Observable<Credential> {
+    return from(this.credentialRepository.findOne({ where: { id } })).pipe(
+      switchMap((credential: Credential) => {
+        if (!credential) {
+          return throwError(() => new Error(`Credential with id ${id} not found`));
+        }
+
+        // Soft delete by setting isActive to false
+        credential.isActive = false;
+        credential.updatedBy = 'system';
+
+        return from(this.credentialRepository.save(credential)).pipe(
+          map((updated: Credential) => {
+            delete updated.secret;
+            delete updated.keySecret;
+            delete updated.password;
+            return updated;
+          }),
+        );
+      }),
+      catchError((err) => throwError(() => err)),
+    );
   }
 
   private checkUserExistence(username: string): Observable<boolean> {
