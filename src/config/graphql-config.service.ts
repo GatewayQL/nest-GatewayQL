@@ -1,22 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GatewayModuleOptions, GatewayOptionsFactory } from '@nestjs/graphql';
-import { ServiceDefinition } from '@apollo/federation';
+import { IntrospectAndCompose } from '@apollo/gateway';
+
+interface ServiceEndpoint {
+  name: string;
+  url: string;
+}
 
 @Injectable()
-export class GraphQLConfigService implements GatewayOptionsFactory {
+export class GraphQLConfigService {
   constructor(private configService: ConfigService) {}
 
-  public createGatewayOptions(): Partial<GatewayModuleOptions> {
+  public createGatewayOptions() {
     return {
       gateway: {
-        serviceList: this.serviceList(),
+        supergraphSdl: new IntrospectAndCompose({
+          subgraphs: this.serviceList(),
+        }),
       },
     };
   }
 
-  serviceList(): Pick<ServiceDefinition, 'name' | 'url'>[] {
-    const serviceEndpoints = this.configService.get<string>('serviceEndpoints');
+  serviceList(): ServiceEndpoint[] {
+    const serviceEndpoints = this.configService.get<ServiceEndpoint[]>('serviceEndpoints');
     if (Array.isArray(serviceEndpoints)) {
       return serviceEndpoints;
     } else {
