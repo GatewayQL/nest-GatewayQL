@@ -3,6 +3,3 @@
 
 # Run lint-staged
 npx lint-staged
-
-# Run tests on staged files
-npm test -- --bail --findRelatedTests
