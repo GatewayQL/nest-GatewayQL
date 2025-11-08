@@ -1,0 +1,60 @@
+title: Nest GatewayQL Documentation
+description: Production-ready GraphQL API Gateway built with NestJS and Apollo Federation
+theme: jekyll-theme-cayman
+baseurl: /nest-GatewayQL
+url: https://gatewayql.github.io
+
+# Site settings
+author:
+  name: GatewayQL Team
+  email: support@gatewayql.com
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Exclude files
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /getting-started/
+  - title: Configuration
+    url: /configuration/
+  - title: Features
+    url: /features/
+  - title: API Reference
+    url: /api/
+  - title: Deployment
+    url: /deployment/
+  - title: Guides
+    url: /guides/
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Social
+github_username: GatewayQL
+twitter_username: gatewayql
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
