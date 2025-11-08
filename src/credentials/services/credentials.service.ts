@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { from, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import * as uuid62 from 'uuid62';
+import { v4 as uuidv4 } from 'uuid';
 import { CreateCredentialInput } from '../dto/create-credential.input';
 import { UpdateCredentialInput } from '../dto/update-credential.input';
 import { CredentialEntity } from '../models/credential.entity';
@@ -45,7 +45,7 @@ export class CredentialsService {
                         newCredential.isActive = true;
                         newCredential.type = createCredentialInput.type;
                         if (createCredentialInput.type === 'key-auth') {
-                          newCredential.keyId = new uuid62.v4();
+                          newCredential.keyId = uuidv4();
                           newCredential.keySecret = secretHash;
                         } else if (
                           createCredentialInput.type === 'basic-auth'
