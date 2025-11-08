@@ -5,10 +5,11 @@ import { UserEntity } from '../models/user.entity';
 import { UsersService } from './users.service';
 import { UserRole } from '../models/user.interface';
 import { ConfigService } from '@nestjs/config';
+import { AuthService } from '../../auth/services/auth.service';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let repo: Repository<UserEntity>;
+  let _repo: Repository<UserEntity>;
 
   const oneUser = new UserEntity();
   oneUser.firstname = 'John';
@@ -16,6 +17,16 @@ describe('UsersService', () => {
   oneUser.username = 'john.doe';
   oneUser.email = 'john.doe@test.com';
   oneUser.role = UserRole.ADMIN;
+
+  const mockAuthService = {
+    saltAndHash: jest.fn().mockReturnValue({
+      toPromise: jest.fn().mockResolvedValue('hashed-password'),
+    }),
+    compareSaltAndHashed: jest.fn(),
+    generateJWT: jest.fn(),
+    encrypt: jest.fn(),
+    decrypt: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,18 +43,21 @@ describe('UsersService', () => {
             delete: jest.fn().mockResolvedValue(true),
           },
         },
+        {
+          provide: AuthService,
+          useValue: mockAuthService,
+        },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    repo = module.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
+    _repo = module.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
 
     service.create({
       firstname: 'admin',
       lastname: 'admin',
       username: 'admin.admin',
       email: 'admin.admin@test.com',
-      role: UserRole.ADMIN,
     });
   });
 
