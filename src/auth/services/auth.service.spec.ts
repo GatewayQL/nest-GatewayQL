@@ -15,8 +15,13 @@ describe('AuthService', () => {
   const mockConfigService = {
     get: jest.fn((key: string) => {
       const config = {
+        crypto: {
+          algorithm: 'aes-256-cbc',
+          cipherKey: '12345678901234567890123456789012', // Exactly 32 bytes for aes-256-cbc
+          saltRounds: 10,
+        },
         'crypto.algorithm': 'aes-256-cbc',
-        'crypto.cipherKey': 'test-key-32-characters-long!!',
+        'crypto.cipherKey': '12345678901234567890123456789012',
         'crypto.saltRounds': 10,
       };
       return config[key];
