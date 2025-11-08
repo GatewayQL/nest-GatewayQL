@@ -87,6 +87,7 @@
     "winston": "^3.18.3"
   },
   "devDependencies": {
+    "@as-integrations/express5": "^1.1.2",
     "@graphql-tools/schema": "^10.0.7",
     "@nestjs/cli": "^11.0.10",
     "@nestjs/schematics": "^11.0.3",

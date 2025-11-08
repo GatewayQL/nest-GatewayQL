@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let repo: Repository<UserEntity>;
+  let _repo: Repository<UserEntity>;
 
   const oneUser = new UserEntity();
   oneUser.firstname = 'John';
@@ -36,14 +36,13 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    repo = module.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
+    _repo = module.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
 
     service.create({
       firstname: 'admin',
       lastname: 'admin',
       username: 'admin.admin',
       email: 'admin.admin@test.com',
-      role: UserRole.ADMIN,
     });
   });
 
