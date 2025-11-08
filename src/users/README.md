@@ -5,6 +5,7 @@ This module includes GraphQL subscriptions for real-time updates on user operati
 ## Available Subscriptions
 
 ### 1. userCreated
+
 Subscribe to user creation events.
 
 ```graphql
@@ -20,6 +21,7 @@ subscription {
 ```
 
 ### 2. userUpdated
+
 Subscribe to user update events.
 
 ```graphql
@@ -35,6 +37,7 @@ subscription {
 ```
 
 ### 3. userDeleted
+
 Subscribe to user deletion events.
 
 ```graphql
@@ -78,6 +81,7 @@ ws://localhost:3000/admin/graphql
 ```
 
 For production:
+
 ```
 wss://your-domain.com/admin/graphql
 ```
@@ -123,6 +127,7 @@ Then send the subscription protocol messages according to the graphql-ws spec.
 ## Production Considerations
 
 1. **Scalability**: For multi-instance deployments, replace the in-memory `PubSub` with Redis PubSub:
+
    ```typescript
    import { RedisPubSub } from 'graphql-redis-subscriptions';
 
@@ -135,6 +140,7 @@ Then send the subscription protocol messages according to the graphql-ws spec.
    ```
 
 2. **Authentication**: Add authentication to subscription context:
+
    ```typescript
    subscriptions: {
      'graphql-ws': {

@@ -10,6 +10,7 @@ export default tseslint.config(
       '**/coverage/**',
       '**/generated/**',
       '**/.husky/**',
+      '**/admin-dashboard/**',
       '*.js',
       '*.mjs',
     ],

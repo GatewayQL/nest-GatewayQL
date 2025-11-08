@@ -27,12 +27,14 @@ This guide provides comprehensive instructions for deploying Nest GatewayQL to p
 ### System Requirements
 
 **Minimum:**
+
 - CPU: 2 cores
 - RAM: 2GB
 - Disk: 10GB
 - Network: 1Gbps
 
 **Recommended:**
+
 - CPU: 4 cores
 - RAM: 4GB
 - Disk: 50GB (with logs)
@@ -179,7 +181,7 @@ services:
     image: gatewayql:latest
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - DB_HOST=postgres
@@ -190,7 +192,8 @@ services:
       - postgres
       - redis
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health/live"]
+      test:
+        ['CMD', 'wget', '-q', '--spider', 'http://localhost:3000/health/live']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -206,7 +209,7 @@ services:
       POSTGRES_USER: gatewayql_prod
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U gatewayql_prod"]
+      test: ['CMD-SHELL', 'pg_isready -U gatewayql_prod']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -218,7 +221,7 @@ services:
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -268,47 +271,47 @@ spec:
         app: gatewayql
     spec:
       containers:
-      - name: gatewayql
-        image: ghcr.io/your-org/gatewayql:v1.0.0
-        ports:
-        - containerPort: 3000
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: gatewayql-secrets
-              key: jwt-secret
-        - name: CIPHER_KEY
-          valueFrom:
-            secretKeyRef:
-              name: gatewayql-secrets
-              key: cipher-key
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: gatewayql-secrets
-              key: db-password
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "2000m"
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
+        - name: gatewayql
+          image: ghcr.io/your-org/gatewayql:v1.0.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: gatewayql-secrets
+                  key: jwt-secret
+            - name: CIPHER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gatewayql-secrets
+                  key: cipher-key
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gatewayql-secrets
+                  key: db-password
+          resources:
+            requests:
+              memory: '512Mi'
+              cpu: '500m'
+            limits:
+              memory: '2Gi'
+              cpu: '2000m'
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
 ---
 apiVersion: v1
 kind: Service
@@ -318,9 +321,9 @@ spec:
   selector:
     app: gatewayql
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
   type: LoadBalancer
 ```
 
@@ -364,12 +367,16 @@ docker push your-account.dkr.ecr.us-east-1.amazonaws.com/gatewayql:latest
           "protocol": "tcp"
         }
       ],
-      "environment": [
-        {"name": "NODE_ENV", "value": "production"}
-      ],
+      "environment": [{ "name": "NODE_ENV", "value": "production" }],
       "secrets": [
-        {"name": "JWT_SECRET", "valueFrom": "arn:aws:secretsmanager:us-east-1:account:secret:jwt-secret"},
-        {"name": "DB_PASSWORD", "valueFrom": "arn:aws:secretsmanager:us-east-1:account:secret:db-password"}
+        {
+          "name": "JWT_SECRET",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:account:secret:jwt-secret"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:account:secret:db-password"
+        }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -380,7 +387,10 @@ docker push your-account.dkr.ecr.us-east-1.amazonaws.com/gatewayql:latest
         }
       },
       "healthCheck": {
-        "command": ["CMD-SHELL", "wget -q --spider http://localhost:3000/health/live || exit 1"],
+        "command": [
+          "CMD-SHELL",
+          "wget -q --spider http://localhost:3000/health/live || exit 1"
+        ],
         "interval": 30,
         "timeout": 5,
         "retries": 3,
@@ -450,6 +460,7 @@ aws ecs create-service \
 Access metrics at: `http://your-domain.com/metrics`
 
 Key metrics to monitor:
+
 - `http_requests_total`: Total HTTP requests
 - `http_request_duration_seconds`: Request latency
 - `process_cpu_user_seconds_total`: CPU usage
@@ -491,23 +502,23 @@ Configure critical alerts:
 
 ```yaml
 groups:
-- name: gatewayql
-  rules:
-  - alert: HighErrorRate
-    expr: rate(http_requests_total{status_code=~"5.."}[5m]) > 0.05
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      summary: "High error rate detected"
+  - name: gatewayql
+    rules:
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status_code=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: 'High error rate detected'
 
-  - alert: HighMemoryUsage
-    expr: process_resident_memory_bytes > 1.5e9
-    for: 10m
-    labels:
-      severity: warning
-    annotations:
-      summary: "Memory usage above 1.5GB"
+      - alert: HighMemoryUsage
+        expr: process_resident_memory_bytes > 1.5e9
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Memory usage above 1.5GB'
 ```
 
 ## Troubleshooting
@@ -708,21 +719,25 @@ appendfsync everysec
 ### Regular Tasks
 
 **Daily:**
+
 - Review error logs
 - Check metrics dashboards
 - Verify backup completion
 
 **Weekly:**
+
 - Review security alerts
 - Update dependencies (minor versions)
 - Performance analysis
 
 **Monthly:**
+
 - Security audit
 - Capacity planning review
 - Disaster recovery drill
 
 **Quarterly:**
+
 - Major version updates
 - Infrastructure review
 - Security penetration testing

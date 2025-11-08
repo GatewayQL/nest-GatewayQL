@@ -47,7 +47,6 @@ export class ApiController {
 export class DataController {
   @Get('limited')
   // Uses global rate limiting
-
   @Get('unlimited')
   @SkipThrottle() // Skip rate limiting
   getUnlimitedData() {

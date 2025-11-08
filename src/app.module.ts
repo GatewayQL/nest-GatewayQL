@@ -11,12 +11,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CacheModule } from '@nestjs/cache-manager';
-import {
-  APP_GUARD,
-  APP_FILTER,
-  APP_INTERCEPTOR,
-  APP_VERSION,
-} from '@nestjs/core';
+import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { join } from 'path';
 import {
   makeCounterProvider,
@@ -124,11 +119,6 @@ import { ThrottlerGuard } from '@nestjs/throttler';
   controllers: [AppController, MetricsController],
   providers: [
     AppService,
-    // API Version
-    {
-      provide: APP_VERSION,
-      useValue: process.env.API_VERSION || 'v1',
-    },
     // Prometheus metrics
     makeCounterProvider({
       name: 'http_requests_total',

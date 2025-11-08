@@ -93,6 +93,7 @@ admin-dashboard/
 The dashboard uses JWT-based authentication. By default, it connects to the GatewayQL backend at `http://localhost:3000/admin`.
 
 **Demo Credentials:**
+
 - Username: `admin`
 - Password: `password`
 

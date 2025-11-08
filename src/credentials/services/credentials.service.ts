@@ -102,7 +102,7 @@ export class CredentialsService {
   }
 
   findOne(id: string): Observable<Credential> {
-    return from(this.credentialRepository.findOne(id)).pipe(
+    return from(this.credentialRepository.findOneBy({ id })).pipe(
       map((credential: Credential) => {
         delete credential.password;
         delete credential.keySecret;
@@ -113,7 +113,7 @@ export class CredentialsService {
   }
 
   findByCosumerId(consumerId: string) {
-    return this.credentialRepository.findOne({ consumerId });
+    return this.credentialRepository.findOneBy({ consumerId });
   }
 
   update(
