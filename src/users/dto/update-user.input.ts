@@ -5,7 +5,7 @@ import { UserInput } from './users.input';
 export class UpdateUserInput extends PartialType(UserInput) {
   @Field()
   id?: string;
-  
+
   @Field()
   firstname?: string;
 

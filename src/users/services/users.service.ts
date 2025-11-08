@@ -1,15 +1,24 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { User } from '../models/user.interface';
 import { CreateUserInput } from '../dto/create-user.input';
+import { AuthService } from '../../auth/services/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<User> {
@@ -27,6 +36,13 @@ export class UsersService {
     }
     newUser.email = createUserInput.email;
     newUser.redirectUri = createUserInput.redirectUri;
+
+    // Hash password if provided
+    if (createUserInput.password) {
+      newUser.passwordHash = await firstValueFrom(
+        this.authService.saltAndHash(createUserInput.password),
+      );
+    }
 
     const createdUser = await this.userRepository.create(newUser);
 
@@ -64,5 +80,13 @@ export class UsersService {
 
   async findByUsername(username: string): Promise<User> {
     return await this.userRepository.findOneBy({ username });
+  }
+
+  async findByUsernameWithPassword(username: string): Promise<UserEntity> {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.passwordHash')
+      .where('user.username = :username', { username })
+      .getOne();
   }
 }
