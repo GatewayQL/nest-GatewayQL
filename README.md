@@ -113,6 +113,7 @@ npm run start:prod
 ```
 
 The application will be available at:
+
 - 🔍 **GraphQL Gateway**: http://localhost:3000/graphql
 - ⚙️ **Admin GraphQL**: http://localhost:3000/admin
 - ❤️ **Health Check**: http://localhost:3000/health
@@ -164,10 +165,10 @@ Aggregate multiple GraphQL microservices into a single unified API:
 
 ```typescript
 // Configure service endpoints in .env
-SERVICE_ENDPOINTS=[
-  {"name":"users","url":"http://users-service:4001/graphql"},
-  {"name":"orders","url":"http://orders-service:4002/graphql"}
-]
+SERVICE_ENDPOINTS = [
+  { name: 'users', url: 'http://users-service:4001/graphql' },
+  { name: 'orders', url: 'http://orders-service:4002/graphql' },
+];
 ```
 
 ### 2. Authentication & Authorization
@@ -353,13 +354,15 @@ When running in development mode, access the GraphQL Playground:
 ```graphql
 # Create User
 mutation {
-  createUser(createUserInput: {
-    username: "john"
-    email: "john@example.com"
-    password: "secret123"
-    firstName: "John"
-    lastName: "Doe"
-  }) {
+  createUser(
+    createUserInput: {
+      username: "john"
+      email: "john@example.com"
+      password: "secret123"
+      firstName: "John"
+      lastName: "Doe"
+    }
+  ) {
     id
     username
     email
@@ -379,12 +382,14 @@ query {
 
 # Create Credential
 mutation {
-  createCredential(createCredentialInput: {
-    consumerId: "user-123"
-    type: KEY_AUTH
-    keyId: "api-key-123"
-    keySecret: "secret"
-  }) {
+  createCredential(
+    createCredentialInput: {
+      consumerId: "user-123"
+      type: KEY_AUTH
+      keyId: "api-key-123"
+      keySecret: "secret"
+    }
+  ) {
     id
     keyId
     type
@@ -394,20 +399,20 @@ mutation {
 
 ## Comparison with Express Gateway
 
-| Feature | Express Gateway | Nest GatewayQL |
-|---------|----------------|----------------|
-| Protocol | REST/HTTP | **GraphQL** |
-| Framework | Express.js | **NestJS 11** |
-| TypeScript | ❌ | ✅ |
-| GraphQL Federation | ❌ | ✅ |
-| Rate Limiting | ✅ | ✅ |
-| Authentication | ✅ | ✅ |
-| Caching | ✅ | ✅ |
-| Health Checks | Basic | **Advanced** |
-| Structured Logging | ❌ | ✅ |
-| Modern Security | Basic | **Helmet + Advanced** |
-| Testing | Limited | **Comprehensive** |
-| Query Complexity | N/A | ✅ |
+| Feature            | Express Gateway | Nest GatewayQL        |
+| ------------------ | --------------- | --------------------- |
+| Protocol           | REST/HTTP       | **GraphQL**           |
+| Framework          | Express.js      | **NestJS 11**         |
+| TypeScript         | ❌              | ✅                    |
+| GraphQL Federation | ❌              | ✅                    |
+| Rate Limiting      | ✅              | ✅                    |
+| Authentication     | ✅              | ✅                    |
+| Caching            | ✅              | ✅                    |
+| Health Checks      | Basic           | **Advanced**          |
+| Structured Logging | ❌              | ✅                    |
+| Modern Security    | Basic           | **Helmet + Advanced** |
+| Testing            | Limited         | **Comprehensive**     |
+| Query Complexity   | N/A             | ✅                    |
 
 ## Performance Considerations
 
@@ -453,6 +458,7 @@ curl http://localhost:3000/health
 ### Logs
 
 Logs are written to:
+
 - **Console**: All environments
 - **logs/error.log**: Production errors only
 - **logs/combined.log**: Production all logs
@@ -462,6 +468,7 @@ Logs are written to:
 ### Common Issues
 
 **Database Connection Failed**
+
 ```bash
 # Check PostgreSQL is running
 docker ps | grep postgres
@@ -472,12 +479,14 @@ DB_PORT=5432
 ```
 
 **Port Already in Use**
+
 ```bash
 # Change port in .env
 PORT=3001
 ```
 
 **GraphQL Playground Not Loading**
+
 ```bash
 # Ensure GRAPHQL_PLAYGROUND=true in .env
 # Only available in development mode
@@ -506,6 +515,7 @@ Nest GatewayQL is [MIT licensed](LICENSE).
 ## Acknowledgments
 
 Built with:
+
 - [NestJS](https://nestjs.com/) - Progressive Node.js framework
 - [Apollo Federation](https://www.apollographql.com/docs/federation/) - GraphQL gateway
 - [TypeORM](https://typeorm.io/) - ORM for TypeScript

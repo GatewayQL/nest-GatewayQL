@@ -56,7 +56,7 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    return await this.userRepository.findOne({ id });
+    return await this.userRepository.findOneBy({ id });
   }
 
   async findAll(): Promise<User[]> {
@@ -75,11 +75,11 @@ export class UsersService {
   }
 
   async findByemail(email: string): Promise<User> {
-    return await this.userRepository.findOne({ email });
+    return await this.userRepository.findOneBy({ email });
   }
 
   async findByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOne({ username });
+    return await this.userRepository.findOneBy({ username });
   }
 
   async findByUsernameWithPassword(username: string): Promise<UserEntity> {

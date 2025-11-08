@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - Major Improvements
 
 #### 🚀 Core Framework Updates
+
 - **Upgraded to NestJS 11** - Latest version with all modern features and improvements
 - **Updated to GraphQL 16** - Latest GraphQL implementation
 - **TypeScript 5.7** - Latest TypeScript with improved type safety
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **TypeORM 0.3** - Latest ORM with improved TypeScript support
 
 #### 🔒 Security Enhancements
+
 - **Environment-based Configuration** - All secrets now loaded from .env files
 - **Helmet Integration** - Security headers (CSP, XSS protection, etc.)
 - **CORS Configuration** - Configurable cross-origin resource sharing
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Removed Hardcoded Secrets** - All sensitive data in environment variables
 
 #### 📊 Logging & Monitoring
+
 - **Winston Logger** - Structured logging with multiple transports
 - **Request/Response Logging** - Automatic HTTP request logging
 - **Error Tracking** - Comprehensive error logging with stack traces
@@ -33,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Production Log Files** - Separate error.log and combined.log files
 
 #### ❤️ Health Checks
+
 - **@nestjs/terminus Integration** - Comprehensive health monitoring
 - **Database Health Check** - PostgreSQL connection monitoring
 - **Memory Health Check** - Heap and RSS memory monitoring
@@ -40,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Kubernetes-ready Endpoints** - /health, /health/ready, /health/live
 
 #### 🛡️ Policy System
+
 - **API Key Guard** - API key authentication support
 - **Public Routes Decorator** - @Public() for skipping authentication
 - **Skip Throttle Decorator** - @SkipThrottle() for rate limit exceptions
@@ -49,11 +54,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Logging Interceptor** - Global request/response logging
 
 #### 💾 Caching
+
 - **Cache Manager Integration** - Response caching with @nestjs/cache-manager
 - **Configurable TTL** - Global and per-route cache configuration
 - **In-memory Caching** - Fast response caching
 
 #### 🧪 Testing
+
 - **Improved Unit Tests** - Comprehensive test coverage for services
 - **Mock Patterns** - Proper mocking strategies following best practices
 - **Auth Service Tests** - Complete test suite for authentication
@@ -61,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Credentials Service Tests** - Testing for credential management
 
 #### 📝 Documentation
+
 - **Comprehensive README** - Complete documentation with examples
 - **Policy System Docs** - Detailed policy usage guide
 - **Architecture Diagram** - Visual representation of system architecture
@@ -70,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security Best Practices** - Production security checklist
 
 #### ⚙️ Configuration
+
 - **Environment Files** - .env.example with all configuration options
 - **Type-safe Configuration** - ConfigService with proper typing
 - **Service Endpoints** - JSON-based service configuration
@@ -77,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **JWT Configuration** - Configurable JWT settings
 
 #### 🏗️ Project Structure
+
 - **Common Module** - Shared filters, interceptors, and loggers
 - **Policies Module** - Reusable policy decorators and guards
 - **Health Module** - Health check endpoints
@@ -85,18 +95,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 #### 📦 Dependencies
+
 - Updated all dependencies to latest stable versions
 - Removed deprecated packages (apollo-server-express, uuid62)
 - Added modern alternatives (@apollo/server, uuid, winston)
 - Improved devDependencies for better development experience
 
 #### 🔄 Configuration Management
+
 - Migrated from YAML-only to environment-based configuration
 - Removed hardcoded values from system.config.yml
 - Improved gateway.configuration.ts with environment variables
 - Better database configuration with TypeORM
 
 #### 🎨 Code Quality
+
 - Improved TypeScript typing throughout the codebase
 - Better error handling with custom exceptions
 - Standardized response formats
@@ -105,12 +118,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 #### 🐛 Bug Fixes
+
 - Fixed database configuration path (db.types → db)
 - Improved error messages and stack traces
 - Better handling of null/undefined values
 - Fixed TypeORM entity configuration
 
 #### 🔐 Security Fixes
+
 - Removed hardcoded JWT secret (was: 'secret')
 - Removed hardcoded cipher key (was: 'sensitiveKey')
 - Improved password hashing with configurable salt rounds
@@ -133,12 +148,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### From v0.0.1 to v0.1.0
 
 1. **Update Dependencies**
+
    ```bash
    rm -rf node_modules package-lock.json
    npm install
    ```
 
 2. **Environment Configuration**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
@@ -164,6 +181,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.1] - Initial Release
 
 ### Added
+
 - Basic GraphQL Gateway with Apollo Federation
 - User management module
 - Credentials management module
@@ -177,6 +195,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Future Roadmap
 
 ### Planned Features (v0.2.0)
+
 - [ ] Prometheus metrics integration
 - [ ] Distributed tracing with OpenTelemetry
 - [ ] Redis caching support
@@ -188,6 +207,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] Service mesh integration
 
 ### Under Consideration
+
 - [ ] gRPC support
 - [ ] Message queue integration (RabbitMQ/Kafka)
 - [ ] Database migrations

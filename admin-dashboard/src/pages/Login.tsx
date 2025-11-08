@@ -33,9 +33,7 @@ export const Login: React.FC = () => {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">
-            GatewayQL Admin
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold">GatewayQL Admin</CardTitle>
           <CardDescription>
             Enter your credentials to access the admin dashboard
           </CardDescription>
@@ -76,14 +74,8 @@ export const Login: React.FC = () => {
                 required
               />
             </div>
-            {error && (
-              <div className="text-sm text-destructive">{error}</div>
-            )}
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            {error && <div className="text-sm text-destructive">{error}</div>}
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>

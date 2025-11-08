@@ -1,5 +1,11 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Users, KeyRound, Activity, TrendingUp } from 'lucide-react';
 
 const stats = [
@@ -48,7 +54,9 @@ export const Dashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">{stat.change} from last month</p>
+              <p className="text-xs text-muted-foreground">
+                {stat.change} from last month
+              </p>
             </CardContent>
           </Card>
         ))}
@@ -70,7 +78,9 @@ export const Dashboard: React.FC = () => {
               ].map((activity, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <p className="text-sm">{activity.action}</p>
-                  <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {activity.time}
+                  </p>
                 </div>
               ))}
             </div>

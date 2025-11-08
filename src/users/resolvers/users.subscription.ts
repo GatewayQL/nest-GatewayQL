@@ -2,7 +2,7 @@ import { Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { UserEntity } from '../models/user.entity';
 
-const pubSub = new PubSub();
+const pubSub = new PubSub() as any;
 
 export const USER_CREATED = 'userCreated';
 export const USER_UPDATED = 'userUpdated';

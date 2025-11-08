@@ -36,7 +36,6 @@ export class CacheConfigService implements CacheOptionsFactory {
           ttl: parseInt(this.configService.get('CACHE_TTL', '60000'), 10),
           // Connection pool settings
           database: parseInt(this.configService.get('REDIS_DB', '0'), 10),
-          lazyConnect: false, // Connect immediately to detect issues early
 
           // Error handling
           commandsQueueMaxLength: 1000, // Prevent memory issues with queued commands

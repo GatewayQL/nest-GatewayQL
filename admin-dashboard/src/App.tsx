@@ -53,7 +53,9 @@ function App() {
                 path="credentials"
                 element={
                   <div className="space-y-6">
-                    <h1 className="text-3xl font-bold">Credentials Management</h1>
+                    <h1 className="text-3xl font-bold">
+                      Credentials Management
+                    </h1>
                     <p>Credentials management interface coming soon...</p>
                   </div>
                 }

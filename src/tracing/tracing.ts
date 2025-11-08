@@ -1,17 +1,23 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
-import { Resource } from '@opentelemetry/resources';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { resourceFromAttributes } from '@opentelemetry/resources';
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from '@opentelemetry/semantic-conventions';
 
 export const initTracing = () => {
   const sdk = new NodeSDK({
-    resource: new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: 'nest-gatewayql',
-      [SemanticResourceAttributes.SERVICE_VERSION]: '0.1.0',
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: 'nest-gatewayql',
+      [ATTR_SERVICE_VERSION]: '0.1.0',
     }),
     instrumentations: [
       getNodeAutoInstrumentations({
         '@opentelemetry/instrumentation-fs': {
+          enabled: false,
+        },
+        '@opentelemetry/instrumentation-openai': {
           enabled: false,
         },
       }),
