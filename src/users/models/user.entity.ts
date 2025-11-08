@@ -48,6 +48,9 @@ export class UserEntity extends BaseEntity {
   @Field()
   role?: UserRole;
 
+  @Column({ select: false, nullable: true })
+  passwordHash?: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   @Field()
   createdAt?: number;

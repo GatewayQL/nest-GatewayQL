@@ -28,5 +28,4 @@ describe('UsersPipe', () => {
       //expect(pipe.transform(user)).toEqual(CreateUserInput);
     });
   });
-
 });

@@ -44,7 +44,7 @@ export class CredentialEntity extends BaseEntity {
   @Field()
   passwordHash?: string;
 
-  @Column({ select: false, nullable: true  })
+  @Column({ select: false, nullable: true })
   @Field()
   secret?: string;
 
