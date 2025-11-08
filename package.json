@@ -83,7 +83,6 @@
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20",
     "uuid": "^13.0.0",
-    "uuid62": "^1.0.2",
     "winston": "^3.18.3"
   },
   "devDependencies": {
@@ -128,6 +127,9 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!uuid)"
+    ],
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
