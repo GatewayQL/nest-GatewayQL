@@ -5,21 +5,370 @@ title: CLI Reference
 
 # CLI Reference
 
-Nest GatewayQL provides a comprehensive command-line interface for managing your API gateway. This guide covers all available CLI commands.
+Nest GatewayQL provides two types of command-line interfaces:
+1. **Management CLI (`gql`)** - For managing users, credentials, scopes, and the gateway
+2. **Development CLI (npm scripts)** - For building, testing, and deploying
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Application Commands](#application-commands)
-- [Database Commands](#database-commands)
-- [Migration Commands](#migration-commands)
-- [Development Commands](#development-commands)
-- [Testing Commands](#testing-commands)
-- [Utility Commands](#utility-commands)
+- [Management CLI](#management-cli)
+  - [Installation](#installation)
+  - [Users Commands](#users-commands)
+  - [Credentials Commands](#credentials-commands)
+  - [Scopes Commands](#scopes-commands)
+  - [Gateway Commands](#gateway-commands)
+- [Development CLI](#development-cli)
+  - [Application Commands](#application-commands)
+  - [Database Commands](#database-commands)
+  - [Migration Commands](#migration-commands)
+  - [Development Commands](#development-commands)
+  - [Testing Commands](#testing-commands)
+  - [Utility Commands](#utility-commands)
 
-## Overview
+---
 
-The CLI is built using npm scripts defined in `package.json` and uses various tools including NestJS CLI, TypeORM, and Jest.
+## Management CLI
+
+The `gql` command-line tool provides a user-friendly interface for managing your GatewayQL instance, similar to [Express Gateway's CLI](https://www.express-gateway.io/docs/cli/).
+
+### Installation
+
+After building the project, you can use the CLI:
+
+```bash
+# Build the project first
+npm run build
+
+# Use via npm script
+npm run cli -- [command]
+
+# Or link globally for direct access
+npm link
+gql [command]
+```
+
+### Users Commands
+
+Manage users in your GatewayQL system.
+
+#### Create User
+
+```bash
+gql users create [options]
+```
+
+**Options:**
+- `-u, --username <username>` - Username
+- `-e, --email <email>` - Email address
+- `-p, --password <password>` - Password
+- `-f, --firstname <firstname>` - First name
+- `-l, --lastname <lastname>` - Last name
+- `-r, --role <role>` - User role (admin or user) [default: user]
+- `--redirect-uri <uri>` - Redirect URI
+
+**Examples:**
+```bash
+# Interactive mode
+gql users create
+
+# Create admin user
+gql users create -u admin -e admin@example.com -p secret123 -r admin
+
+# Create regular user
+gql users create -u john -e john@example.com -p pass123 -f John -l Doe
+```
+
+#### List Users
+
+```bash
+gql users list [options]
+```
+
+**Options:**
+- `--role <role>` - Filter by role (admin or user)
+
+**Examples:**
+```bash
+# List all users
+gql users list
+
+# List only admins
+gql users list --role admin
+```
+
+#### User Info
+
+```bash
+gql users info <username>
+```
+
+Get detailed information about a specific user.
+
+**Example:**
+```bash
+gql users info john
+```
+
+#### Update User
+
+```bash
+gql users update <username> [options]
+```
+
+**Options:**
+- `-f, --firstname <firstname>` - First name
+- `-l, --lastname <lastname>` - Last name
+- `-p, --password <password>` - New password
+- `--redirect-uri <uri>` - Redirect URI
+
+**Example:**
+```bash
+gql users update john -p newpassword123
+```
+
+#### Remove User
+
+```bash
+gql users remove <username> [options]
+```
+
+**Options:**
+- `-f, --force` - Skip confirmation
+
+**Example:**
+```bash
+gql users remove john --force
+```
+
+### Credentials Commands
+
+Manage API credentials for authentication.
+
+#### Create Credential
+
+```bash
+gql credentials create [options]
+```
+
+**Options:**
+- `-c, --consumer-id <consumerId>` - Consumer ID (username)
+- `-t, --type <type>` - Credential type: basic-auth, key-auth, oauth2, jwt [default: basic-auth]
+- `-s, --secret <secret>` - Secret/password
+- `--scope <scope>` - Scope (comma-separated) [default: admin]
+
+**Examples:**
+```bash
+# Interactive mode
+gql credentials create
+
+# Create key-auth credential
+gql credentials create -c john -t key-auth -s mysecret123 --scope "api:read,api:write"
+
+# Create OAuth2 credential
+gql credentials create -c john -t oauth2 -s oauth_secret --scope admin
+```
+
+**Note:** The secret will be displayed only once. Save it securely!
+
+#### List Credentials
+
+```bash
+gql credentials list [options]
+```
+
+**Options:**
+- `-c, --consumer-id <consumerId>` - Filter by consumer ID
+- `--active-only` - Show only active credentials
+
+**Examples:**
+```bash
+# List all credentials
+gql credentials list
+
+# List for specific user
+gql credentials list -c john
+
+# List only active
+gql credentials list --active-only
+```
+
+#### Credential Info
+
+```bash
+gql credentials info <id>
+```
+
+Get detailed information about a credential.
+
+**Example:**
+```bash
+gql credentials info 550e8400-e29b-41d4-a716-446655440000
+```
+
+#### Update Credential
+
+```bash
+gql credentials update <id> [options]
+```
+
+**Options:**
+- `-s, --secret <secret>` - New secret
+- `--scope <scope>` - New scope
+- `--activate` - Activate the credential
+- `--deactivate` - Deactivate the credential
+
+**Example:**
+```bash
+gql credentials update 550e8400-e29b-41d4-a716-446655440000 --deactivate
+```
+
+#### Activate/Deactivate Credential
+
+```bash
+gql credentials activate <id>
+gql credentials deactivate <id>
+```
+
+**Example:**
+```bash
+gql credentials activate 550e8400-e29b-41d4-a716-446655440000
+```
+
+#### Remove Credential
+
+```bash
+gql credentials remove <id> [options]
+```
+
+**Options:**
+- `-f, --force` - Skip confirmation
+
+### Scopes Commands
+
+Manage API scopes for access control.
+
+#### Create Scope
+
+```bash
+gql scopes create [options]
+```
+
+**Options:**
+- `-n, --name <name>` - Scope name
+- `-d, --description <description>` - Scope description
+
+**Example:**
+```bash
+gql scopes create -n "api:read" -d "Read-only API access"
+```
+
+#### List Scopes
+
+```bash
+gql scopes list
+```
+
+#### Scope Info
+
+```bash
+gql scopes info <name>
+```
+
+#### Update Scope
+
+```bash
+gql scopes update <name> [options]
+```
+
+**Options:**
+- `-d, --description <description>` - New description
+
+#### Remove Scope
+
+```bash
+gql scopes remove <name> [options]
+```
+
+**Options:**
+- `-f, --force` - Skip confirmation
+
+### Gateway Commands
+
+Manage the GatewayQL server.
+
+#### Start Gateway
+
+```bash
+gql gateway start [options]
+```
+
+**Options:**
+- `-p, --port <port>` - Port to run on [default: 3000]
+- `--dev` - Run in development mode
+- `--debug` - Run in debug mode
+
+**Examples:**
+```bash
+# Production mode
+gql gateway start
+
+# Development mode
+gql gateway start --dev
+
+# Custom port
+gql gateway start -p 4000
+```
+
+#### Gateway Status
+
+```bash
+gql gateway status [options]
+```
+
+**Options:**
+- `-p, --port <port>` - Port to check [default: 3000]
+
+Check if the gateway is running and view health status.
+
+#### Stop Gateway
+
+```bash
+gql gateway stop [options]
+```
+
+**Options:**
+- `-p, --port <port>` - Port the server is running on [default: 3000]
+
+#### Gateway Config
+
+```bash
+gql gateway config
+```
+
+Display current gateway configuration (database, Redis, environment, etc.).
+
+### Command Aliases
+
+For convenience, shorter aliases are available:
+- `gql user` → `gql users`
+- `gql credential` → `gql credentials`
+- `gql scope` → `gql scopes`
+
+### Getting Help
+
+Use `--help` with any command:
+
+```bash
+gql --help
+gql users --help
+gql credentials create --help
+```
+
+---
+
+## Development CLI
+
+The development CLI is built using npm scripts defined in `package.json` and uses various tools including NestJS CLI, TypeORM, and Jest.
 
 ### Prerequisites
 
