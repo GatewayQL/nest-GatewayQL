@@ -10,7 +10,9 @@ import { CredentialEntity } from '../models/credential.entity';
 import { Credential } from '../models/credential.interface';
 import { AuthService } from '../../auth/services/auth.service';
 import { UsersService } from '../../users/services/users.service';
+import { AppsService } from '../../apps/services/apps.service';
 import { User } from '../../users/models/user.interface';
+import { ConsumerType } from '../models/credential.interface';
 
 @Injectable()
 export class CredentialsService {
@@ -22,6 +24,9 @@ export class CredentialsService {
     private authService: AuthService,
 
     private userService: UsersService,
+
+    @Inject(forwardRef(() => AppsService))
+    private appsService: AppsService,
   ) {}
 
   create(createCredentialInput: CreateCredentialInput): Observable<Credential> {
