@@ -137,6 +137,77 @@ The application will be available at:
 - ⚙️ **Admin GraphQL**: http://localhost:3000/admin
 - ❤️ **Health Check**: http://localhost:3000/health
 
+## CLI Management Tool
+
+GatewayQL includes a powerful command-line interface for managing users, credentials, scopes, and the gateway itself, similar to [Express Gateway's CLI](https://www.express-gateway.io/docs/cli/).
+
+### Quick Start
+
+```bash
+# Build the project first
+npm run build
+
+# Run CLI commands
+npm run cli -- [command]
+
+# Or link globally
+npm link
+gql [command]
+```
+
+### Available Commands
+
+```bash
+# Users management
+gql users create              # Create a new user
+gql users list                # List all users
+gql users info <username>     # Get user details
+gql users update <username>   # Update a user
+gql users remove <username>   # Remove a user
+
+# Credentials management
+gql credentials create        # Create API credentials
+gql credentials list          # List all credentials
+gql credentials info <id>     # Get credential details
+gql credentials activate <id> # Activate a credential
+gql credentials deactivate <id> # Deactivate a credential
+gql credentials remove <id>   # Remove a credential
+
+# Scopes management
+gql scopes create            # Create a new scope
+gql scopes list              # List all scopes
+gql scopes info <name>       # Get scope details
+gql scopes update <name>     # Update a scope
+gql scopes remove <name>     # Remove a scope
+
+# Gateway management
+gql gateway start            # Start the gateway server
+gql gateway stop             # Stop the gateway server
+gql gateway status           # Check gateway status
+gql gateway config           # Show gateway configuration
+```
+
+### Examples
+
+```bash
+# Create an admin user
+gql users create -u admin -e admin@example.com -p secret123 -r admin
+
+# Create API key credentials for a user
+gql credentials create -c john -t key-auth -s mysecret123 --scope "api:read,api:write"
+
+# List all active credentials
+gql credentials list --active-only
+
+# Start the gateway in development mode
+gql gateway start --dev
+
+# Check gateway health
+gql gateway status
+```
+
+For detailed CLI documentation, see [CLI.md](CLI.md).
+
 ## Environment Variables
 
 Create a `.env` file based on `.env.example`:
