@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { createUsersCommand } from './commands/users.command';
+import { createAppsCommand } from './commands/apps.command';
 import { createCredentialsCommand } from './commands/credentials.command';
 import { createScopesCommand } from './commands/scopes.command';
 import { createGatewayCommand } from './commands/gateway.command';
@@ -21,6 +22,7 @@ console.log(chalk.cyan.bold('╚════════════════
 
 // Register commands
 program.addCommand(createUsersCommand());
+program.addCommand(createAppsCommand());
 program.addCommand(createCredentialsCommand());
 program.addCommand(createScopesCommand());
 program.addCommand(createGatewayCommand());

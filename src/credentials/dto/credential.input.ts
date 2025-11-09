@@ -1,13 +1,19 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { CredentialType } from '../models/credential.interface';
+import { CredentialType, ConsumerType } from '../models/credential.interface';
 
 @InputType()
 export class CredentialInput {
   @Field()
   id?: string;
 
-  @Field()
-  consumerId: string;
+  @Field({ nullable: true })
+  consumerId?: string;
+
+  @Field({ nullable: true })
+  appId?: string;
+
+  @Field(() => String, { nullable: true })
+  consumerType?: ConsumerType;
 
   @Field()
   scope?: string;

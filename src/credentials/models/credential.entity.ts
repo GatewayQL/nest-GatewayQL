@@ -6,8 +6,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-import { CredentialType } from './credential.interface';
+import { CredentialType, ConsumerType } from './credential.interface';
+import { AppEntity } from '../../apps/models/app.entity';
 
 @ObjectType()
 @Entity('credentials')
@@ -16,9 +19,23 @@ export class CredentialEntity extends BaseEntity {
   @Field()
   id?: string;
 
-  @Column({ name: 'consumer_id' })
-  @Field()
-  consumerId: string;
+  @Column({ name: 'consumer_id', nullable: true })
+  @Field({ nullable: true })
+  consumerId?: string;
+
+  @Column({
+    name: 'consumer_type',
+    type: 'enum',
+    enum: ConsumerType,
+    default: ConsumerType.USER,
+  })
+  @Field(() => String)
+  consumerType?: ConsumerType;
+
+  @ManyToOne(() => AppEntity, { nullable: true, eager: true })
+  @JoinColumn({ name: 'app_id' })
+  @Field(() => AppEntity, { nullable: true })
+  app?: AppEntity;
 
   @Column({ default: 'admin' })
   @Field()
