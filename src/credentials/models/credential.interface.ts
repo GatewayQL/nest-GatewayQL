@@ -1,6 +1,8 @@
 export interface Credential {
   id?: string;
   consumerId?: string;
+  appId?: string;
+  consumerType?: ConsumerType;
   scope?: string;
   keyId?: string;
   isActive?: boolean;
@@ -19,6 +21,11 @@ export enum CredentialType {
   KEY = 'key-auth',
   JWT = 'jwt',
   OAUTH2 = 'oauth2',
+}
+
+export enum ConsumerType {
+  USER = 'user',
+  APP = 'app',
 }
 
 export interface Scope {

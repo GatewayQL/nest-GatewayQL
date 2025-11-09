@@ -29,6 +29,8 @@ import { CacheConfigService } from './config/cache.config';
 import { AuthModule } from './auth/auth.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { UsersModule } from './users/users.module';
+import { AppsModule } from './apps/apps.module';
+import { ScopesModule } from './scopes/scopes.module';
 import { HealthModule } from './health/health.module';
 import { LoggerModule } from './common/logger/logger.module';
 import { MetricsModule } from './metrics/metrics.module';
@@ -113,6 +115,8 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 
     // Feature Modules
     UsersModule,
+    AppsModule,
+    ScopesModule,
     AuthModule,
     CredentialsModule,
     HealthModule,
