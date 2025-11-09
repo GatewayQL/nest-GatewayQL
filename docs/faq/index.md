@@ -21,6 +21,7 @@ Nest GatewayQL is a production-ready GraphQL API Gateway built with NestJS 11 an
 | Framework | Express.js | NestJS 11 |
 | TypeScript | ❌ | ✅ Full support |
 | GraphQL Federation | ❌ | ✅ Apollo Federation |
+| Management CLI | `eg` commands | ✅ `gql` commands |
 | Modern Architecture | Outdated | ✅ Latest patterns |
 
 ### Is it production-ready?
