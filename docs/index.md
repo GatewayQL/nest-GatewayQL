@@ -9,12 +9,30 @@ Welcome to the Nest GatewayQL documentation! Nest GatewayQL is a production-read
 
 ## Quick Links
 
-- [Getting Started](getting-started/) - Install and run Nest GatewayQL
-- [Configuration](configuration/) - Configure your gateway
+### Getting Started
+- [Installation](installation/) - Detailed installation guide for all platforms
+- [Getting Started](getting-started/) - Quick start guide
+- [Core Concepts](core-concepts/) - Understand the architecture
+
+### Configuration & Management
+- [Configuration](configuration/) - Complete configuration reference
+- [CLI Reference](cli/) - Command-line interface guide
+- [Policies](policies/) - Configure policies and security
+
+### User & Access Management
+- [Consumer Management](consumer-management/) - Manage API consumers
+- [Credential Management](credential-management/) - Manage authentication credentials
+- [Admin Guide](admin/) - Administrative operations
+
+### Development & Deployment
 - [Features](features/) - Explore all features
-- [API Reference](api/) - Complete API documentation
-- [Deployment](deployment/) - Deploy to production
-- [Guides](guides/) - Tutorials and how-to guides
+- [API Reference](api/) - Complete GraphQL and REST API documentation
+- [Deployment](deployment/) - Deploy to production environments
+
+### Help & Support
+- [FAQ](faq/) - Frequently asked questions
+- [GitHub Issues](https://github.com/GatewayQL/nest-GatewayQL/issues) - Report bugs or request features
+- [Discussions](https://github.com/GatewayQL/nest-GatewayQL/discussions) - Community discussions
 
 ## What is Nest GatewayQL?
 

@@ -29,18 +29,32 @@ exclude:
 navigation:
   - title: Home
     url: /
+  - title: Installation
+    url: /installation/
   - title: Getting Started
     url: /getting-started/
+  - title: Core Concepts
+    url: /core-concepts/
   - title: Configuration
     url: /configuration/
+  - title: CLI Reference
+    url: /cli/
+  - title: Policies
+    url: /policies/
+  - title: Consumer Management
+    url: /consumer-management/
+  - title: Credential Management
+    url: /credential-management/
   - title: Features
     url: /features/
   - title: API Reference
     url: /api/
+  - title: Admin Guide
+    url: /admin/
   - title: Deployment
     url: /deployment/
-  - title: Guides
-    url: /guides/
+  - title: FAQ
+    url: /faq/
 
 # Plugins
 plugins:
