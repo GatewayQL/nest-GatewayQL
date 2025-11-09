@@ -36,6 +36,7 @@
 
 - ✅ **GraphQL Federation** - Aggregate multiple GraphQL microservices
 - ✅ **NestJS 11** - Latest framework with modern TypeScript support
+- ✅ **Plugin System** - Extensible plugin architecture inspired by Express Gateway
 - ✅ **Authentication & Authorization** - JWT, API Key, Role-based access control
 - ✅ **Rate Limiting** - Protect APIs with configurable throttling
 - ✅ **Request Caching** - Improve performance with cache-manager
@@ -362,6 +363,65 @@ Reusable policies similar to Express Gateway:
 // Skip authentication
 @Public()
 ```
+
+### 9. Plugin System
+
+Extensible plugin architecture inspired by [Express Gateway](https://www.express-gateway.io/docs/plugins/):
+
+```typescript
+// Example plugin
+export const myPlugin: PluginManifest = {
+  name: 'my-plugin',
+  version: '1.0.0',
+
+  init: async (context) => {
+    // Register policies
+    context.registerPolicy({
+      name: 'custom-auth',
+      policy: customAuthHandler,
+    });
+
+    // Register conditions
+    context.registerCondition({
+      name: 'custom-check',
+      handler: conditionHandler,
+    });
+
+    // Register routes
+    context.registerRoutes([
+      { method: 'GET', path: '/status', handler: statusHandler }
+    ]);
+
+    // Register GraphQL hooks
+    context.registerGraphQLHook({
+      type: GraphQLHookType.RESOLVER_MIDDLEWARE,
+      handler: resolverMiddleware,
+    });
+  },
+};
+```
+
+**Features:**
+- Create custom policies for request/response processing
+- Define conditions for conditional execution
+- Register custom HTTP endpoints
+- Hook into GraphQL execution (schema transforms, resolver middleware)
+- Built-in conditions: pathMatch, method, header, queryParam, graphqlOperation
+- Example plugins: rate-limit, logging, CORS
+
+**Configuration:**
+```typescript
+// config/gateway.configuration.ts
+plugins: [
+  {
+    package: 'my-gatewayql-plugin',
+    enabled: true,
+    settings: { apiKey: 'xxx' },
+  },
+]
+```
+
+See [Plugin Documentation](https://gatewayql.github.io/nest-GatewayQL/plugins/) for details.
 
 ## Testing
 
