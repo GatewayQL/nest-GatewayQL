@@ -7,6 +7,25 @@
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License">
   </a>
+  <a href="https://github.com/GatewayQL/nest-GatewayQL/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/GatewayQL/nest-GatewayQL/ci.yml?branch=main" alt="CI Status">
+  </a>
+  <a href="https://github.com/GatewayQL/nest-GatewayQL/issues">
+    <img src="https://img.shields.io/github/issues/GatewayQL/nest-GatewayQL" alt="Issues">
+  </a>
+  <a href="https://github.com/GatewayQL/nest-GatewayQL/pulls">
+    <img src="https://img.shields.io/github/issues-pr/GatewayQL/nest-GatewayQL" alt="Pull Requests">
+  </a>
+  <a href="https://github.com/GatewayQL/nest-GatewayQL/stargazers">
+    <img src="https://img.shields.io/github/stars/GatewayQL/nest-GatewayQL" alt="Stars">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://gatewayql.github.io/nest-GatewayQL">📖 Documentation</a> •
+  <a href="https://gatewayql.github.io/nest-GatewayQL/getting-started">🚀 Getting Started</a> •
+  <a href="https://github.com/GatewayQL/nest-GatewayQL/issues">🐛 Report Bug</a> •
+  <a href="https://github.com/GatewayQL/nest-GatewayQL/issues/new?template=feature_request.md">✨ Request Feature</a>
 </p>
 
 ## Description
@@ -494,7 +513,9 @@ PORT=3001
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+We welcome contributions from the community! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
+
+### Quick Start for Contributors
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -502,15 +523,19 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+For detailed guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 Nest GatewayQL is [MIT licensed](LICENSE).
 
 ## Support
 
-- **Documentation**: https://gatewayql.com
+- **Documentation**: https://gatewayql.github.io/nest-GatewayQL
 - **Issues**: https://github.com/GatewayQL/nest-GatewayQL/issues
+- **Discussions**: https://github.com/GatewayQL/nest-GatewayQL/discussions
 - **Discord**: [Join our community](https://discord.gg/gatewayql)
+- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Acknowledgments
 
