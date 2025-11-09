@@ -34,6 +34,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import { MetricsModule } from './metrics/metrics.module';
 import { MetricsController } from './metrics/metrics.controller';
 import { EventsModule } from './events/events.module';
+import { PluginsModule } from './plugins/plugins.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ThrottlerGuard } from '@nestjs/throttler';
@@ -115,6 +116,9 @@ import { ThrottlerGuard } from '@nestjs/throttler';
     AuthModule,
     CredentialsModule,
     HealthModule,
+
+    // Plugin System
+    PluginsModule,
   ],
   controllers: [AppController, MetricsController],
   providers: [
