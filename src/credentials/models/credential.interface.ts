@@ -1,7 +1,10 @@
+import { AppEntity } from '../../apps/models/app.entity';
+
 export interface Credential {
   id?: string;
   consumerId?: string;
   appId?: string;
+  app?: AppEntity;
   consumerType?: ConsumerType;
   scope?: string;
   keyId?: string;

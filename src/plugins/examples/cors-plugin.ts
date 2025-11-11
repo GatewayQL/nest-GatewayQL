@@ -19,7 +19,7 @@ const corsPolicy: PolicyHandler = async (params, context) => {
     allowedHeaders = ['Content-Type', 'Authorization'],
     credentials = false,
     maxAge = 86400,
-  } = params;
+  } = params || {};
 
   const { req, res } = context;
 

@@ -19,7 +19,7 @@ export class GraphQLHookRegistry {
     existing.push(hook);
 
     // Sort by priority (lower = earlier execution)
-    existing.sort((a, b) => (a.priority || 100) - (b.priority || 100));
+    existing.sort((a, b) => (a.priority ?? 100) - (b.priority ?? 100));
 
     this.hooks.set(hook.type, existing);
   }

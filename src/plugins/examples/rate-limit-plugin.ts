@@ -12,27 +12,33 @@ import {
 // In-memory store for rate limiting
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
 
+// Export function to reset state for testing
+export const resetRateLimitState = () => {
+  requestCounts.clear();
+};
+
 /**
  * Rate limit policy handler
  */
 const rateLimitPolicy: PolicyHandler = async (params, context) => {
-  const { windowMs = 60000, max = 100 } = params;
+  const { windowMs = 60000, max = 100 } = params || {};
   const { req, res } = context;
 
-  const key = req.ip || req.connection.remoteAddress || 'unknown';
+  const key = req.ip || req.connection?.remoteAddress || 'unknown';
   const now = Date.now();
 
   let record = requestCounts.get(key);
 
   if (!record || now > record.resetTime) {
     record = {
-      count: 1,
+      count: 0,
       resetTime: now + windowMs,
     };
     requestCounts.set(key, record);
-  } else {
-    record.count++;
   }
+
+  // Increment count for this request
+  record.count++;
 
   // Set rate limit headers
   res.setHeader('X-RateLimit-Limit', max);

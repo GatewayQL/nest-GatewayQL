@@ -49,6 +49,8 @@ export class CredentialsService {
                         newCredential.scope = createCredentialInput.scope;
                         newCredential.isActive = true;
                         newCredential.type = createCredentialInput.type;
+                        newCredential.consumerType = createCredentialInput.consumerType || ConsumerType.USER;
+
                         if (createCredentialInput.type === 'key-auth') {
                           newCredential.keyId = uuidv4();
                           newCredential.keySecret = secretHash;
@@ -59,35 +61,38 @@ export class CredentialsService {
                           newCredential.passwordHash = secretHash;
                         } else if (createCredentialInput.type == 'oauth2') {
                           newCredential.secret = secretHash;
+                        } else if (createCredentialInput.type === 'jwt') {
+                          newCredential.secret = secretHash;
                         }
+
                         return from(
                           this.credentialRepository.save(newCredential),
                         ).pipe(
                           map((credential: Credential) => {
-                            const { secret, keySecret, password, ...result } =
+                            const { secret, keySecret, password, passwordHash, ...result } =
                               credential;
                             return result;
                           }),
-                          catchError((err) => throwError(err)),
+                          catchError((err) => throwError(() => err)),
                         );
                       } else {
-                        throwError('Cannot create secretHash.');
+                        return throwError(() => new Error('Cannot create secretHash.'));
                       }
                     }),
                   );
               } else {
-                throwError(
+                return throwError(() => new Error(
                   'Credential: ' +
                     createCredentialInput.consumerId +
                     ' already exists and is active.',
-                );
+                ));
               }
             }),
           );
         } else {
-          throwError(
+          return throwError(() => new Error(
             'User : ' + createCredentialInput.consumerId + ' does not exists.',
-          );
+          ));
         }
       }),
     );
@@ -100,6 +105,7 @@ export class CredentialsService {
           delete v.password;
           delete v.keySecret;
           delete v.secret;
+          delete v.passwordHash;
         });
         return credentials;
       }),
@@ -109,9 +115,12 @@ export class CredentialsService {
   findOne(id: string): Observable<Credential> {
     return from(this.credentialRepository.findOneBy({ id })).pipe(
       map((credential: Credential) => {
-        delete credential.password;
-        delete credential.keySecret;
-        delete credential.secret;
+        if (credential) {
+          delete credential.password;
+          delete credential.keySecret;
+          delete credential.secret;
+          delete credential.passwordHash;
+        }
         return credential;
       }),
     );
@@ -155,6 +164,8 @@ export class CredentialsService {
                   credential.passwordHash = secretHash;
                 } else if (credential.type === 'oauth2') {
                   credential.secret = secretHash;
+                } else if (credential.type === 'jwt') {
+                  credential.secret = secretHash;
                 }
 
                 credential.updatedBy =
@@ -165,6 +176,7 @@ export class CredentialsService {
                     delete updated.secret;
                     delete updated.keySecret;
                     delete updated.password;
+                    delete updated.passwordHash;
                     return updated;
                   }),
                 );
@@ -179,6 +191,7 @@ export class CredentialsService {
             delete updated.secret;
             delete updated.keySecret;
             delete updated.password;
+            delete updated.passwordHash;
             return updated;
           }),
         );
@@ -205,6 +218,7 @@ export class CredentialsService {
             delete updated.secret;
             delete updated.keySecret;
             delete updated.password;
+            delete updated.passwordHash;
             return updated;
           }),
         );

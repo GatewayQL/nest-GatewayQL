@@ -87,7 +87,15 @@ export class ConditionEvaluator {
       res: context.res,
     };
 
-    return condition.handler(params, conditionContext);
+    try {
+      return await condition.handler(params, conditionContext);
+    } catch (error) {
+      this.logger.error(
+        `Error evaluating condition: ${error.message}`,
+        error.stack,
+      );
+      return false;
+    }
   }
 
   /**
