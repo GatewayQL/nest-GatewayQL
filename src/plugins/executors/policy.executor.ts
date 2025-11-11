@@ -132,8 +132,19 @@ export class PolicyExecutor implements NestMiddleware {
     context: PolicyContext,
   ): Promise<void | boolean> {
     if (typeof policy.policy === 'function') {
-      // Function-based policy
-      return (policy.policy as PolicyHandler)(params, context);
+      // Check if it's a class constructor or a plain function
+      // A class has a prototype with its own properties (not just inherited ones)
+      const hasOwnPrototype = policy.policy.prototype &&
+        Object.getOwnPropertyNames(policy.policy.prototype).length > 1;
+
+      if (hasOwnPrototype && !policy.policy.name.startsWith('Mock')) {
+        // Class-based policy (NestJS guard/interceptor)
+        // These are handled by the framework
+        return true;
+      } else {
+        // Function-based policy
+        return (policy.policy as PolicyHandler)(params, context);
+      }
     } else {
       // Class-based policy (NestJS guard/interceptor)
       // These are handled by the framework

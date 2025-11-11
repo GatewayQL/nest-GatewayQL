@@ -13,11 +13,11 @@ const program = new Command();
 program
   .name('gql')
   .description('GatewayQL - A microservices GraphQL gateway management CLI')
-  .version('0.1.0');
+  .version('0.1.0-alpha.1');
 
 // Add banner
 console.log(chalk.cyan.bold('\n╔══════════════════════════════════════╗'));
-console.log(chalk.cyan.bold('║         GatewayQL CLI v0.1.0        ║'));
+console.log(chalk.cyan.bold('║      GatewayQL CLI v0.1.0-alpha.1   ║'));
 console.log(chalk.cyan.bold('╚══════════════════════════════════════╝\n'));
 
 // Register commands

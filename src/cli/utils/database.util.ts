@@ -15,7 +15,7 @@ export async function getDataSource(): Promise<DataSource> {
     dataSource = new DataSource({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT, 10) || 5432,
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_DATABASE || 'gatewayql',
@@ -36,4 +36,10 @@ export async function closeDataSource(): Promise<void> {
   if (dataSource && dataSource.isInitialized) {
     await dataSource.destroy();
   }
+  dataSource = null; // Reset for next use
+}
+
+// For testing purposes - reset the module state
+export function resetDataSource(): void {
+  dataSource = null;
 }

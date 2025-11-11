@@ -23,8 +23,29 @@ export class GraphQLConfigService {
 
   serviceList(): ServiceEndpoint[] {
     const serviceEndpoints = this.configService.get<ServiceEndpoint[]>('serviceEndpoints');
+
     if (Array.isArray(serviceEndpoints)) {
-      return serviceEndpoints;
+      // If explicitly an empty array, return it as-is
+      if (serviceEndpoints.length === 0) {
+        return [];
+      }
+
+      // Validate and filter service endpoints
+      const validServices = serviceEndpoints.filter(service =>
+        service &&
+        typeof service === 'object' &&
+        typeof service.name === 'string' &&
+        service.name.trim() !== '' &&
+        typeof service.url === 'string' &&
+        service.url.trim() !== ''
+      );
+
+      // If no valid services found after filtering, return default
+      if (validServices.length === 0) {
+        return [{ name: 'default', url: 'http://localhost:3001/graphql' }];
+      }
+
+      return validServices;
     } else {
       return [{ name: 'default', url: 'http://localhost:3001/graphql' }];
     }

@@ -5,6 +5,107 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0-alpha.1] - 2025-11-11
+
+### Added
+
+#### 🧪 Comprehensive Testing Suite
+
+- **Complete Test Coverage** - Added missing test files for critical components:
+  - `src/auth/decorators/roles.decorator.spec.ts` - Tests for role-based access control decorator
+  - `src/credentials/models/credential.entity.spec.ts` - Entity model validation tests
+  - `src/credentials/models/credential.interface.spec.ts` - Interface and enum tests
+  - `src/plugins/plugin.controller.spec.ts` - Dynamic plugin routing tests
+  - `src/metrics/metrics.interceptor.spec.ts` - Metrics collection tests
+  - `src/config/graphql-complexity.plugin.spec.ts` - Query complexity protection tests
+  - `src/app.service.spec.ts` - Basic service tests
+
+#### 🔌 Advanced Plugin System
+
+- **Express Gateway Compatibility** - Comprehensive plugin architecture:
+  - Dynamic route registration and middleware execution
+  - Policy-based request/response transformation
+  - Condition-based routing (method, path, headers, GraphQL operations)
+  - Built-in plugins (CORS, rate limiting, logging)
+  - Plugin registries for extensible functionality
+
+#### 📱 Apps and Scopes System
+
+- **OAuth2-like App Management**:
+  - Application registration with client credentials
+  - Scope-based permission system
+  - App-specific API keys and authentication
+  - Integration with existing credential system
+
+#### 🛠️ Enhanced CLI Management
+
+- **Express Gateway-style CLI** - Comprehensive command-line interface:
+  - `gql users create/list/info/update/remove` - User management
+  - `gql credentials create/list/info/activate/deactivate/remove` - Credential management
+  - `gql apps create/list/info/update/remove` - Application management
+  - `gql scopes create/list/info/update/remove` - Scope management
+  - `gql gateway start/stop/status/config` - Gateway lifecycle management
+  - Formatted table output and JSON export options
+  - Interactive prompts for secure credential creation
+
+#### 📊 Production Monitoring
+
+- **Prometheus Metrics Integration**:
+  - HTTP request/response metrics collection
+  - Custom metrics interceptor for performance monitoring
+  - Duration tracking and status code reporting
+
+#### 📖 Comprehensive Documentation
+
+- **Multi-page Documentation Structure**:
+  - API reference with GraphQL examples
+  - CLI command documentation with examples
+  - Plugin development guide
+  - Architecture overview and comparisons
+  - Production deployment guide
+  - Security best practices
+
+### Enhanced
+
+#### 🔧 Configuration Management
+
+- **Advanced GraphQL Configuration**:
+  - Query complexity analysis plugin
+  - Configurable complexity limits via environment variables
+  - Enhanced schema federation support
+
+#### 🔐 Security Improvements
+
+- **Vulnerability Fixes**:
+  - Replaced vulnerable `uuid62` package with secure `uuid`
+  - Enhanced authentication patterns in tests
+  - Improved error handling in CLI commands
+
+#### ✅ Testing Infrastructure
+
+- **Improved Test Quality**:
+  - Fixed failing unit tests for UsersService and AuthService
+  - Added comprehensive E2E tests for GraphQL federation
+  - Better mocking patterns and test isolation
+  - 59/59 test suites passing with 1259+ tests
+
+### Fixed
+
+#### 🐛 CLI and Testing Fixes
+
+- **Command Execution**:
+  - Resolved CLI command timeout issues
+  - Fixed database connection handling in tests
+  - Improved error messages and user feedback
+  - Better handling of edge cases in credential management
+
+#### 🔒 Security Patches
+
+- **Package Vulnerabilities**:
+  - Updated all dependencies to latest secure versions
+  - Removed deprecated and vulnerable packages
+  - Enhanced input validation and sanitization
+
 ## [0.1.0] - 2025-11-07
 
 ### Added - Major Improvements
