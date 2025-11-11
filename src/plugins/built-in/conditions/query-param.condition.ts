@@ -30,10 +30,13 @@ export const queryParamCondition: ConditionDefinition = {
     const paramValue = req.query?.[config.name];
 
     if (config.exists !== undefined) {
-      return config.exists ? paramValue !== undefined : paramValue === undefined;
+      // null and undefined are both considered non-existent
+      const exists = paramValue !== undefined && paramValue !== null;
+      return config.exists ? exists : !exists;
     }
 
-    if (config.value !== undefined && paramValue) {
+    // For value matching, we need to handle the parameter existing (including empty strings)
+    if (config.value !== undefined && paramValue !== undefined && paramValue !== null) {
       if (config.value instanceof RegExp) {
         return config.value.test(String(paramValue));
       }

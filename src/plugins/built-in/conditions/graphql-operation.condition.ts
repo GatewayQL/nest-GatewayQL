@@ -25,9 +25,10 @@ export const graphqlOperationCondition: ConditionDefinition = {
 
     const query = req.body.query as string;
 
-    // Simple operation type detection
+    // Simple operation type detection - check if operation appears appropriately
     for (const operation of operations) {
-      const regex = new RegExp(`^\\s*${operation}\\s`, 'i');
+      // Match operation at start (with optional whitespace) or after closing brace (for multiple operations)
+      const regex = new RegExp(`(^\\s*|\\s*}\\s*)${operation}\\s`, 'i');
       if (regex.test(query)) {
         return true;
       }

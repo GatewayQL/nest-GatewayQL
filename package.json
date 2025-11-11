@@ -1,6 +1,6 @@
 {
   "name": "nest-gatewayql",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "A microservices GraphQL gateway built on NestJS",
   "author": "",
   "private": true,
@@ -137,7 +137,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!uuid)"
+      "node_modules/(?!(uuid|chalk|#ansi-styles|#supports-color|inquirer))"
     ],
     "collectCoverageFrom": [
       "**/*.(t|j)s"
@@ -145,7 +145,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "^src/(.*)$": "<rootDir>/$1"
+      "^src/(.*)$": "<rootDir>/$1",
+      "^chalk$": "<rootDir>/__mocks__/chalk.ts"
     }
   }
 }

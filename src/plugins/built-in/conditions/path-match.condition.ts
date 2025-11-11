@@ -11,10 +11,20 @@ export const pathMatchCondition: ConditionDefinition = {
     const patterns = Array.isArray(config) ? config : [config];
 
     for (const pattern of patterns) {
-      // Support wildcard patterns
-      const matchFn = match(pattern, { decode: decodeURIComponent });
-      if (matchFn(req.path || req.url)) {
-        return true;
+      try {
+        // Support wildcard patterns
+        const matchFn = match(pattern, { decode: decodeURIComponent });
+        const matchResult = matchFn(req.path || req.url);
+        if (matchResult) {
+          return true;
+        }
+      } catch (error) {
+        // If this is a single string pattern, re-throw the error
+        if (!Array.isArray(config)) {
+          throw error;
+        }
+        // For arrays, continue to next pattern if this one fails
+        continue;
       }
     }
 

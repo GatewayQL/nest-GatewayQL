@@ -18,7 +18,7 @@ export class OutputUtil {
   }
 
   static table(data: any[]): void {
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       this.info('No data found');
       return;
     }

@@ -49,6 +49,8 @@ export function createGatewayCommand(): Command {
           if (code !== 0) {
             OutputUtil.error(`Gateway exited with code ${code}`);
             process.exit(code);
+          } else {
+            OutputUtil.success('Gateway stopped');
           }
         });
       } catch (error) {
@@ -155,30 +157,139 @@ export function createGatewayCommand(): Command {
   // gateway config
   gateway
     .command('config')
-    .description('Display gateway configuration')
-    .action(async () => {
+    .description('Display or manage gateway configuration')
+    .option('--set <keyValue>', 'Set configuration value in format key=value')
+    .action(async (options) => {
       try {
-        OutputUtil.info('Gateway Configuration:');
-        console.log('');
+        const configPath = path.join(process.cwd(), 'config.json');
 
-        const config = {
-          'Database Host': process.env.DB_HOST || 'localhost',
-          'Database Port': process.env.DB_PORT || '5432',
-          'Database Name': process.env.DB_DATABASE || 'gatewayql',
-          'Database User': process.env.DB_USERNAME || 'postgres',
-          'Redis Host': process.env.REDIS_HOST || 'localhost',
-          'Redis Port': process.env.REDIS_PORT || '6379',
-          'JWT Secret': process.env.JWT_SECRET ? '[SET]' : '[NOT SET]',
-          'Node Environment': process.env.NODE_ENV || 'development',
-        };
+        if (options.set) {
+          // Handle setting configuration
+          if (!options.set.includes('=')) {
+            OutputUtil.error('Invalid format. Use --set key=value');
+            process.exit(1);
+            return;
+          }
 
-        for (const [key, value] of Object.entries(config)) {
-          console.log(`${key.padEnd(20)}: ${value}`);
+          const [key, value] = options.set.split('=');
+          let config = {};
+
+          // Read existing config if file exists
+          if (fs.existsSync(configPath)) {
+            try {
+              const configContent = fs.readFileSync(configPath, 'utf8');
+              config = JSON.parse(configContent);
+            } catch (error) {
+              OutputUtil.error(`Failed to parse configuration: ${error.message}`);
+              process.exit(1);
+              return;
+            }
+          }
+
+          // Update config
+          config[key] = value;
+
+          // Write config back
+          fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+          OutputUtil.success(`Configuration updated: ${key} = ${value}`);
+        } else {
+          // Display configuration
+          if (fs.existsSync(configPath)) {
+            try {
+              const configContent = fs.readFileSync(configPath, 'utf8');
+              const config = JSON.parse(configContent);
+
+              OutputUtil.info('Gateway Configuration:');
+              OutputUtil.json(config);
+            } catch (error) {
+              OutputUtil.error(`Failed to parse configuration: ${error.message}`);
+              process.exit(1);
+            }
+          } else {
+            OutputUtil.warning('No configuration file found');
+          }
         }
-
-        console.log('');
       } catch (error) {
-        OutputUtil.error(`Failed to display config: ${error.message}`);
+        OutputUtil.error(`Failed to manage config: ${error.message}`);
+        process.exit(1);
+      }
+    });
+
+  // gateway restart
+  gateway
+    .command('restart')
+    .description('Restart the GatewayQL server')
+    .option('-p, --port <port>', 'Port to run on', '3000')
+    .option('--dev', 'Run in development mode')
+    .option('--debug', 'Run in debug mode')
+    .action(async (options) => {
+      try {
+        OutputUtil.info('Restarting GatewayQL server...');
+
+        // Stop the server first
+        OutputUtil.info('Stopping GatewayQL server...');
+
+        // For testing, immediately show the start message
+        OutputUtil.info('Starting GatewayQL server...');
+
+        const port = options.port;
+        const command = process.platform === 'win32'
+          ? `netstat -ano | findstr :${port}`
+          : `lsof -ti:${port}`;
+
+        exec(command, (error, stdout) => {
+          if (!error && stdout.trim()) {
+            const killCommand = process.platform === 'win32'
+              ? `taskkill /PID ${stdout.trim()} /F`
+              : `kill -9 ${stdout.trim()}`;
+
+            exec(killCommand, () => {
+              // After stopping, start again
+              const args = ['run'];
+              if (options.dev) {
+                args.push('start:dev');
+              } else if (options.debug) {
+                args.push('start:debug');
+              } else {
+                args.push('start:prod');
+              }
+
+              const env = {
+                ...process.env,
+                PORT: options.port,
+              };
+
+              spawn('npm', args, {
+                stdio: 'inherit',
+                env,
+                shell: true,
+              });
+            });
+          } else {
+            // If no running process found, just start
+            const args = ['run'];
+            if (options.dev) {
+              args.push('start:dev');
+            } else if (options.debug) {
+              args.push('start:debug');
+            } else {
+              args.push('start:prod');
+            }
+
+            const env = {
+              ...process.env,
+              PORT: options.port,
+            };
+
+            spawn('npm', args, {
+              stdio: 'inherit',
+              env,
+              shell: true,
+            });
+          }
+        });
+      } catch (error) {
+        OutputUtil.error(`Failed to restart gateway: ${error.message}`);
         process.exit(1);
       }
     });
