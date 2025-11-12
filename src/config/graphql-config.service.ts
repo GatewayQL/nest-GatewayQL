@@ -12,10 +12,12 @@ export class GraphQLConfigService {
   constructor(private configService: ConfigService) {}
 
   public createGatewayOptions() {
+    const services = this.serviceList();
+
     return {
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
-          subgraphs: this.serviceList(),
+          subgraphs: services,
         }),
       },
     };
@@ -40,14 +42,14 @@ export class GraphQLConfigService {
         service.url.trim() !== ''
       );
 
-      // If no valid services found after filtering, return default
+      // If no valid services found after filtering, return empty array
       if (validServices.length === 0) {
-        return [{ name: 'default', url: 'http://localhost:3001/graphql' }];
+        return [];
       }
 
       return validServices;
     } else {
-      return [{ name: 'default', url: 'http://localhost:3001/graphql' }];
+      return [];
     }
   }
 }

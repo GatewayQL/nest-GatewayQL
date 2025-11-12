@@ -5,6 +5,209 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-11-12
+
+### Added
+
+#### 🔄 GraphQL Federation Support
+
+- **Complete Apollo Federation v2 Implementation**:
+  - Automatic service discovery and schema composition
+  - Support for federated entities with `@key`, `@extends`, `@external` directives
+  - Cross-service entity resolution and reference resolvers
+  - Conditional gateway loading based on configured services
+  - Dynamic schema merging from multiple microservices
+
+#### 🛍️ Federation Example Services
+
+- **Products Service** - Complete federated microservice:
+  - Product catalog management with CRUD operations
+  - TypeORM integration with PostgreSQL
+  - Federation-ready entity with `@key(fields: "id")` directive
+  - Reference resolvers for cross-service queries
+  - Comprehensive input validation and error handling
+
+- **Reviews Service** - Service extension example:
+  - Reviews management with rating system (1-5 stars)
+  - Product entity extension using `@extends` directive
+  - Cross-service relationship resolution
+  - Aggregated review data (average ratings, review counts)
+
+#### 🧪 Comprehensive E2E Testing Framework
+
+- **Individual Service Tests**:
+  - `products-service.e2e-spec.ts` - Isolated Products service testing
+  - `reviews-service.e2e-spec.ts` - Isolated Reviews service testing
+  - Complete CRUD operations testing
+  - Federation directive validation
+  - Performance benchmarks and error handling
+
+- **Federation Integration Tests**:
+  - `federation-gateway.e2e-spec.ts` - Full federation testing
+  - Cross-service query validation
+  - Complex federated relationships
+  - Schema composition verification
+  - Service health and resilience testing
+
+- **Testing Utilities**:
+  - Docker environment management for E2E tests
+  - Test scenario builders with pre-configured data
+  - GraphQL assertion helpers
+  - Database cleanup and isolation utilities
+
+#### 🐳 Production-Ready Deployment
+
+- **Docker Compose Federation Stack**:
+  - Complete multi-service orchestration
+  - Separate PostgreSQL databases per service
+  - Network isolation and service discovery
+  - Health checks and dependency management
+  - Development and production configurations
+
+- **Management Scripts**:
+  - `start-federation.sh` - Complete stack startup with health checks
+  - `stop-federation.sh` - Graceful service shutdown
+  - `seed-data.sh` - Sample data population
+  - `test-federation.sh` - Comprehensive E2E test runner
+  - `install-dependencies.sh` - Service dependency management
+
+#### 📚 Comprehensive Documentation
+
+- **Federation Documentation** (`docs/federation/`):
+  - Complete federation guide with architecture diagrams
+  - Step-by-step tutorial for building federated services
+  - Best practices for schema design and service boundaries
+  - Production deployment strategies
+  - Troubleshooting guide for common federation issues
+
+- **Code Examples**:
+  - Working federation implementation in `examples/`
+  - Complete microservices with Docker orchestration
+  - E2E testing examples and patterns
+  - Database schema and migration examples
+
+### Enhanced
+
+#### 🔧 Configuration Management
+
+- **Dynamic Service Discovery**:
+  - JSON-based service endpoint configuration
+  - Automatic gateway reconfiguration on service changes
+  - Environment-based federation settings
+  - Conditional module loading for federation
+
+- **GraphQL Gateway Enhancements**:
+  - Improved service health checking
+  - Better error handling for service unavailability
+  - Query complexity protection across federated services
+  - Context propagation between services
+
+#### 🏗️ Architecture Improvements
+
+- **Microservices Patterns**:
+  - Service boundary design examples
+  - Database per service pattern
+  - Inter-service communication best practices
+  - Event-driven architecture considerations
+
+- **Developer Experience**:
+  - Hot reload support for federated development
+  - GraphQL Playground integration across all services
+  - Comprehensive logging and debugging tools
+  - TypeScript support throughout the federation
+
+#### 🎯 Performance Optimizations
+
+- **Federation Query Planning**:
+  - Efficient cross-service query execution
+  - DataLoader patterns for N+1 query prevention
+  - Caching strategies for federated data
+  - Response time monitoring and optimization
+
+### Fixed
+
+#### 🐛 Federation-Specific Fixes
+
+- **Service Discovery Issues**:
+  - Resolved gateway startup with empty service configurations
+  - Fixed schema composition errors with invalid SDL
+  - Improved error messages for federation debugging
+  - Better handling of service unavailability scenarios
+
+- **Type Safety Improvements**:
+  - Fixed GraphQL enum registration for UserRole, CredentialType, ConsumerType
+  - Resolved circular dependency issues in federation modules
+  - Improved TypeScript support for federated resolvers
+
+#### 🔒 Security Enhancements
+
+- **Federation Security**:
+  - Proper authentication context propagation
+  - Service-to-service communication security
+  - Input validation across federated services
+  - Rate limiting for federated endpoints
+
+### Documentation Updates
+
+#### 📖 New Documentation Pages
+
+- **Federation Index** (`docs/federation/index.md`):
+  - Complete federation overview and architecture
+  - Configuration examples and best practices
+  - Production deployment strategies
+  - Monitoring and troubleshooting guides
+
+- **Federation Tutorial** (`docs/federation/tutorial.md`):
+  - Step-by-step guide to building federated services
+  - Code examples and explanations
+  - Advanced patterns and production considerations
+  - Migration strategies from monolithic GraphQL
+
+- **E2E Testing Guide** (`examples/test/README.md`):
+  - Comprehensive testing documentation
+  - Test structure and organization
+  - Testing utilities and helpers
+  - CI/CD integration examples
+
+### Breaking Changes
+
+- **Service Configuration Format**:
+  - `SERVICE_ENDPOINTS` now requires JSON array format
+  - Gateway module conditionally loads based on service configuration
+  - Database configuration updated for multi-service support
+
+### Migration Guide
+
+#### From v0.1.0-alpha.1 to v0.2.0
+
+1. **Update Service Configuration**:
+   ```bash
+   # New format for SERVICE_ENDPOINTS
+   export SERVICE_ENDPOINTS='[
+     {"name":"products","url":"http://localhost:4001/graphql"},
+     {"name":"reviews","url":"http://localhost:4002/graphql"}
+   ]'
+   ```
+
+2. **Federation Setup**:
+   ```bash
+   cd examples
+   ./scripts/start-federation.sh
+   ```
+
+3. **Testing Updates**:
+   ```bash
+   # Run new E2E tests
+   ./scripts/test-federation.sh
+   ```
+
+### Examples and Tutorials
+
+- **Complete Federation Example**: Working microservices architecture in `examples/`
+- **E2E Testing Suite**: Comprehensive testing framework with utilities
+- **Docker Deployment**: Production-ready containerization
+- **Documentation**: Step-by-step tutorials and guides
+
 ## [0.1.0-alpha.1] - 2025-11-11
 
 ### Added

@@ -78,19 +78,21 @@ import { ThrottlerGuard } from '@nestjs/throttler';
     // WebSocket Events
     EventsModule,
 
-    // GraphQL Gateway
-    GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
-      driver: ApolloGatewayDriver,
-      useFactory: async (graphQLConfigService: GraphQLConfigService) => ({
-        ...graphQLConfigService.createGatewayOptions(),
-        server: {
-          plugins: [ApolloServerPluginLandingPageLocalDefault()],
-          context: ({ req }) => ({ headers: req.headers }),
-        },
-      }),
-      imports: [SystemConfigModule],
-      inject: [GraphQLConfigService],
-    }),
+    // GraphQL Gateway (conditional)
+    ...(process.env.SERVICE_ENDPOINTS && JSON.parse(process.env.SERVICE_ENDPOINTS).length > 0
+      ? [GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
+          driver: ApolloGatewayDriver,
+          useFactory: async (graphQLConfigService: GraphQLConfigService) => ({
+            ...graphQLConfigService.createGatewayOptions(),
+            server: {
+              plugins: [ApolloServerPluginLandingPageLocalDefault()],
+              context: ({ req }) => ({ headers: req.headers }),
+            },
+          }),
+          imports: [SystemConfigModule],
+          inject: [GraphQLConfigService],
+        })]
+      : []),
 
     // Admin GraphQL API with Subscriptions
     GraphQLModule.forRoot<ApolloDriverConfig>({

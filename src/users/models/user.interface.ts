@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export interface User {
   id?: string;
   firstname?: string;
@@ -14,3 +16,9 @@ export enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
 }
+
+// Register the enum with GraphQL
+registerEnumType(UserRole, {
+  name: 'UserRole',
+  description: 'User role enum',
+});

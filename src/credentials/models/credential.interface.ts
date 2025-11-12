@@ -1,3 +1,4 @@
+import { registerEnumType } from '@nestjs/graphql';
 import { AppEntity } from '../../apps/models/app.entity';
 
 export interface Credential {
@@ -30,6 +31,17 @@ export enum ConsumerType {
   USER = 'user',
   APP = 'app',
 }
+
+// Register the enums with GraphQL
+registerEnumType(CredentialType, {
+  name: 'CredentialType',
+  description: 'Credential type enum',
+});
+
+registerEnumType(ConsumerType, {
+  name: 'ConsumerType',
+  description: 'Consumer type enum',
+});
 
 export interface Scope {
   id?: string;
