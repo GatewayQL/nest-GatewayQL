@@ -1,0 +1,120 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  federation_postgres:
+    container_name: federation_postgres
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=federation
+    volumes:
+      - federation_postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - federation_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Products Service
+  products_service:
+    container_name: federation_products_service
+    build:
+      context: ./services/products-service
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - PORT=4001
+      - DB_HOST=federation_postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=products_service
+    ports:
+      - "4001:4001"
+    networks:
+      - federation_network
+    depends_on:
+      federation_postgres:
+        condition: service_healthy
+    volumes:
+      - ./services/products-service:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev
+
+  # Reviews Service
+  reviews_service:
+    container_name: federation_reviews_service
+    build:
+      context: ./services/reviews-service
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - PORT=4002
+      - DB_HOST=federation_postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=reviews_service
+    ports:
+      - "4002:4002"
+    networks:
+      - federation_network
+    depends_on:
+      federation_postgres:
+        condition: service_healthy
+    volumes:
+      - ./services/reviews-service:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev
+
+  # Gateway Service (Main GatewayQL)
+  gateway_service:
+    container_name: federation_gateway_service
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+      target: development
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=federation_postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=gatewayql
+      # Federation services configuration
+      - SERVICE_ENDPOINTS=[{"name":"products","url":"http://products_service:4001/graphql"},{"name":"reviews","url":"http://reviews_service:4002/graphql"}]
+      - JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+      - CIPHER_KEY=your-32-character-cipher-key!!
+      - GRAPHQL_PLAYGROUND=true
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    networks:
+      - federation_network
+    depends_on:
+      - federation_postgres
+      - products_service
+      - reviews_service
+    volumes:
+      - ../../:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:debug
+
+networks:
+  federation_network:
+    driver: bridge
+
+volumes:
+  federation_postgres_data:
